@@ -1,4 +1,6 @@
 import React from "react";
+import InputField from "../common/InputField";
+import { Button } from "@mui/material";
 
 const TransferForm = ({
     handleSubmit,
@@ -7,60 +9,44 @@ const TransferForm = ({
     isFetchingRecipient,
     recipientName,
     handleAmountChange,
-    isTransferring,
     amount,
 }: any) => {
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                    Recipient Account Number
-                </label>
-                <input
-                    type="number"
-                    value={toAccountNumber}
-                    onChange={handleToAccountNumberChange}
-                    className="w-full py-2 px-4 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
-                    required
-                    placeholder="Account Number"
-                />
-                {isFetchingRecipient && toAccountNumber.length >= 10 && (
-                    <p className="text-blue-500 mt-1">Checking account...</p>
-                )}
-                {recipientName &&
-                    !isFetchingRecipient &&
-                    toAccountNumber.length >= 10 && (
-                        <p className="bg-blue-100 text-blue-700 p-2 mt-2 rounded-lg font-medium">
+            <InputField
+                label="Recipient Account Number"
+                value={toAccountNumber}
+                onChange={handleToAccountNumberChange}
+                type="number"
+                placeholder="Account Number"
+                required
+                extraInfo={
+                    isFetchingRecipient && toAccountNumber.length >= 10 ? (
+                        <p className="text-blue-500">Checking account...</p>
+                    ) : recipientName && toAccountNumber.length >= 10 ? (
+                        <p className="bg-gray-900 text-gray-400 p-2 rounded-lg font-black">
                             Account Holder: {recipientName}
                         </p>
-                    )}
-                {!recipientName &&
-                    toAccountNumber &&
-                    toAccountNumber.length >= 10 &&
-                    !isFetchingRecipient && (
-                        <p className="text-red-500 mt-1">Account not found.</p>
-                    )}
-            </div>
-            <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                    Enter Amount
-                </label>
-                <input
-                    type="number"
-                    placeholder="Enter Amount"
-                    value={amount}
-                    onChange={handleAmountChange}
-                    className="w-full py-2 px-4 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
-                    required
-                />
-            </div>
-            <button
-                type="submit"
-                className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition duration-300"
-                disabled={isTransferring}
-            >
-                {isTransferring ? "Transferring..." : "Submit"}
-            </button>
+                    ) : toAccountNumber.length >= 10 && !isFetchingRecipient ? (
+                        <p className="bg-gray-900 text-red-700 p-2 rounded-lg font-black">
+                            Account not found.
+                        </p>
+                    ) : null
+                }
+            />
+
+            <InputField
+                label="Enter Amount"
+                value={amount}
+                onChange={handleAmountChange}
+                type="number"
+                placeholder="Enter Amount"
+                required
+            />
+
+            <Button variant="contained" type="submit">
+                Submit
+            </Button>
         </form>
     );
 };

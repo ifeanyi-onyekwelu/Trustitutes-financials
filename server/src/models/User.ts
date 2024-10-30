@@ -8,7 +8,6 @@ interface IRole {
 interface IUser {
     firstName: string;
     lastName: string;
-    username: string;
     email: string;
     password: string;
     refreshToken: string;
@@ -38,11 +37,6 @@ const userSchema = new Schema<IUser>(
             required: true,
             unique: true,
         },
-        username: {
-            type: String,
-            required: true,
-            unique: true,
-        },
         password: {
             type: String,
             required: true,
@@ -62,10 +56,7 @@ const userSchema = new Schema<IUser>(
         address: String,
         state: String,
         zipcode: String,
-        country: {
-            type: String,
-            default: "Nigeria",
-        },
+        country: String,
         isVerified: {
             type: Boolean,
             default: false,

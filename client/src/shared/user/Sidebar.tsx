@@ -9,23 +9,14 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
     const location = useLocation();
     const { pathname } = location;
 
-    // List of menu items to avoid redundancy
     const menuItems = [
         {
             to: "/user/dashboard",
             label: "Dashboard",
             icon: <IoHome className="w-5 h-5" />,
         },
-    ];
-
-    const walletItems = [
         {
-            to: "/user/dashboard/transactions",
-            label: "Transactions",
-            icon: <IoBook className="w-5 h-5" />,
-        },
-        {
-            to: "send-money",
+            to: "transfer",
             label: "Send Money",
             icon: <IoWalletSharp className="w-5 h-5" />,
         },
@@ -35,7 +26,7 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
             icon: <RiSecurePaymentFill className="w-5 h-5" />,
         },
         {
-            to: "virtual-card",
+            to: "card/virtual/add",
             label: "Virtual Cards",
             icon: <AiFillCreditCard className="w-5 h-5" />,
         },
@@ -45,7 +36,7 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
             icon: <RiExchangeDollarLine className="w-5 h-5" />,
         },
         {
-            to: "transaction-history",
+            to: "transactions",
             label: "Transaction History",
             icon: <VscHistory className="w-5 h-5" />,
         },
@@ -80,25 +71,6 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
                         MENU
                     </h4>
                     {menuItems.map(({ to, label, icon }) => (
-                        <Link
-                            key={to}
-                            to={to}
-                            className={`flex items-center mb-2 py-2.5 px-4 gap-3 rounded transition duration-200 hover:bg-text ${
-                                pathname === to ? "bg-text" : ""
-                            }`}
-                        >
-                            {icon}
-                            <span>{label}</span>
-                        </Link>
-                    ))}
-                </div>
-
-                {/* Transfer Section */}
-                <div className="space-y-2 mb-6">
-                    <h4 className="text-gray-300 text-sm px-4 uppercase font-bold">
-                        Wallet
-                    </h4>
-                    {walletItems.map(({ to, label, icon }) => (
                         <Link
                             key={to}
                             to={to}

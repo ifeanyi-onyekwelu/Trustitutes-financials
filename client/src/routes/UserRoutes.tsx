@@ -1,28 +1,29 @@
 import { Routes, Route } from "react-router-dom";
 import UserDashboardLayout from "../layouts/UserDashboardLayout";
-import UserDashboard from "../features/user/Dashboard";
-import UserTransactions from "../features/user/Transactions";
-import UserProfile from "../features/user/Profile";
-import UserFundAccount from "../features/user/Deposit";
-import UserConfirmTransfer from "../features/user/ConfirmDeposit";
-import UserTransferFunds from "../features/user/Transfer";
-import UserTransactionDetails from "../features/user/TransactionDetails";
-import UserWithdraw from "../features/user/Withdraw";
+import Dashboard from "../features/user/Dashboard";
+import Transactions from "../features/user/Transactions";
+import Profile from "../features/user/Profile";
+import FundAccount from "../features/user/Deposit";
+import ConfirmTransfer from "../features/user/ConfirmDeposit";
+import TransferFunds from "../features/user/Transfer";
+import Withdraw from "../features/user/Withdraw";
+import CreateVirtualCard from "../features/user/CreateVirtualCard";
 
 function UserRoutes() {
     return (
         <Routes>
             <Route element={<UserDashboardLayout />}>
-                <Route index element={<UserDashboard />} />
-                <Route path="profile" element={<UserProfile />} />
-                <Route path="deposit" element={<UserFundAccount />} />
+                <Route index element={<Dashboard />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="deposit" element={<FundAccount />} />
+                <Route path="confirm-deposit" element={<ConfirmTransfer />} />
+                <Route path="transfer" element={<TransferFunds />} />
+                <Route path="transactions" element={<Transactions />} />
+                <Route path="withdraw" element={<Withdraw />} />
                 <Route
-                    path="confirm-deposit"
-                    element={<UserConfirmTransfer />}
+                    path="card/virtual/add"
+                    element={<CreateVirtualCard />}
                 />
-                <Route path="transfer" element={<UserTransferFunds />} />
-                <Route path="transactions" element={<UserTransactions />} />
-                <Route path="withdraw" element={<UserWithdraw />} />
             </Route>
         </Routes>
     );

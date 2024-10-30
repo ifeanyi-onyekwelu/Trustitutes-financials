@@ -22,11 +22,11 @@ const UserDashboardLayout = () => {
     if (isError) return <p>An error occurred...</p>;
 
     const content = (
-        <div className="flex bg-gray-200">
+        <div className="flex bg-[#0A0F2C]">
             <Sidebar isOpen={isSidebarOpen} />
-            <div className="md:ml-[25%] flex flex-col w-full md:w-[80%] bg-[#0A0F2C]">
+            <div className="md:ml-[25%] flex flex-col w-full md:w-[80%]">
                 <Navbar toggleSidebar={toggleSidebar} profile={profile} />
-                <main className="flex-1 overflow-auto p-6">
+                <main className="flex-1 overflow-auto p-6 min-h-screen">
                     <Outlet />
                 </main>
             </div>

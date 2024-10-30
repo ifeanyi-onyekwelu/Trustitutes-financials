@@ -2,7 +2,6 @@ import { Request, Response } from "@/utils/types";
 import User from "@/models/User";
 import Transaction from "@/models/Transaction";
 import Account from "@/models/Account";
-import BankDetails from "@/models/BankDetails";
 import CustomError from "@/errors/CustomError";
 import logger from "@/utils/logger";
 

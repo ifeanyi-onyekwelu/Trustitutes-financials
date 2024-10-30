@@ -7,7 +7,6 @@ import logger from "@/utils/logger";
 import CustomError from "@/errors/CustomError";
 import generateRandomReference from "@/utils/generateRefence";
 import uploadImage from "@/utils/uploader";
-import BankDetails from "@/models/BankDetails";
 
 class TransactionController {
     /**
@@ -180,12 +179,6 @@ class TransactionController {
                 { $inc: { balance: -amount } }
             );
 
-            const bankDetails = new BankDetails({
-                accountName,
-                accountNumber,
-                bankName,
-            });
-
             // Create a new transaction record
             const newTransaction = new Transaction({
                 userId: req.user._id,
@@ -194,11 +187,8 @@ class TransactionController {
                 type: "withdrawal",
                 description: `Withdraw of ${amount} to ${bankName}, ${accountName}`,
                 reference: generateRandomReference(),
-                bankDetails: bankDetails._id,
             });
 
-            // Respond with success message
-            await bankDetails.save();
             await newTransaction.save();
             return logger.respond(
                 res,

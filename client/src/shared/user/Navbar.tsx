@@ -39,7 +39,7 @@ const Navbar = ({ toggleSidebar, profile }: any) => {
     }, [isSuccess, navigate]);
 
     return (
-        <nav className="bg-deepNavyBlue text-white p-4 shadow-md border-b border-gray-700">
+        <nav className="bg-deepNavyBlue text-white py-1 px-4 shadow-md border-b border-gray-700">
             <div className="container mx-auto flex justify-between items-center">
                 <div className="flex items-center">
                     <button
@@ -55,6 +55,7 @@ const Navbar = ({ toggleSidebar, profile }: any) => {
                         display: "flex",
                         alignItems: "center",
                         textAlign: "center",
+                        marginBottom: "6px",
                     }}
                 >
                     <Tooltip title="Account settings">

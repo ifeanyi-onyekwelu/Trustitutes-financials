@@ -1,7 +1,12 @@
 import React from "react";
 import Input from "../Input";
 
-const WithdrawForm = ({ handleSubmit, onChange, formData, isTransferring }) => {
+const WithdrawForm = ({
+    handleSubmit,
+    onChange,
+    formData,
+    isTransferring,
+}: any) => {
     return (
         <form onSubmit={handleSubmit}>
             <div className="mb-4">

@@ -5,17 +5,11 @@ interface ITransaction {
     fromAccount: string;
     toAccount: string;
     amount: number;
-    status: "pending" | "succeded" | "failed" | "scheduled";
-    type:
-        | "deposit"
-        | "withdrawal"
-        | "payment"
-        | "transfer"
-        | "scheduledTransfer";
+    status: "pending" | "succeded" | "failed";
+    type: "deposit" | "withdrawal" | "bill-payment" | "transfer";
     description: string;
     reference: string;
-    bankDetails: Schema.Types.ObjectId;
-    receipt?: string; // Define receipt as an optional string field
+    receipt?: string;
     date: Date;
 }
 
@@ -44,19 +38,17 @@ const transactionSchema = new Schema<ITransaction>(
         },
         status: {
             type: String,
+            enum: ["pending", "succeded", "failed"],
             default: "pending",
         },
         type: {
             type: String,
+            enum: ["deposit", "withdrawal", "bill-payment", "transfer"],
             required: true,
         },
         reference: {
             type: String,
             required: true,
-        },
-        bankDetails: {
-            type: Schema.Types.ObjectId,
-            ref: "BankDetails",
         },
         receipt: {
             type: String, // Assuming receipt is stored as a URL or path
