@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 // Base query setup
 const baseQuery = fetchBaseQuery({
-    baseUrl: "http://localhost:3000/api/v1",
+    // baseUrl: "http://localhost:3000/api/v1",
+    baseUrl: "https://trustitutes-financials.onrender.com/api/v1",
     credentials: "include",
     prepareHeaders: (headers, _) => {
         const token = localStorage.getItem("accessToken");
