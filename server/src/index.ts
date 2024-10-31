@@ -40,13 +40,9 @@ app.all("*", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "404.html"));
 });
 
-mongoose.connection.on("open", () => {
+mongoose.connection.once("open", () => {
     console.log("MongoDB Connected!");
     app.listen(PORT, () => {
         console.log(`Listening on PORT: ${PORT}`);
     });
-});
-
-mongoose.connection.on("error", (err) => {
-    throw new Error(`MongoDB Error: ${err}`);
 });
