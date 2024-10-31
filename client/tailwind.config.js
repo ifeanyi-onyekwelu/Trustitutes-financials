@@ -9,6 +9,7 @@ export default {
                 bg: "#FFFAEB",
                 alternate: "#9EDD05",
                 text: "#082720",
+                dashboard: "#0A0F2C",
             },
         },
     },

@@ -26,28 +26,40 @@ class UserController {
      * @route POST /profile/update-profile/:userId
      * @description Update user profile
      * @access Protected
-     * @input {string} firstName - First name of the user
-     * @input {string} lastName - First name of the user
-     * @input {string} username - Username of the user
      * @expected-response {object} - Object containing a message indicating success or failure, along with the updated user
      * @error-handling - Returns a 500 error if an unexpected error occurs during the updating process
      */
     async updateUserProfile(req: Request, res: Response): Promise<void> {
         try {
-            const { firstName, lastName, username } = req.body;
+            const data = req.body;
 
-            const updatedUser = await User.findByIdAndUpdate(
-                req.user._id,
-                { firstName, lastName, username },
-                { new: true }
-            );
+            // Fetch the current user to check the existing email
+            const existingUser = await User.findById(req.user._id);
 
-            if (!updatedUser) {
+            if (!existingUser) {
                 return logger.respondWithError(
                     res,
                     new CustomError("User not found", 404)
                 );
             }
+
+            // Check if the email is different and validate uniqueness
+            if (data.email && data.email !== existingUser.email) {
+                const emailExists = await User.findOne({ email: data.email });
+                if (emailExists) {
+                    return logger.respondWithError(
+                        res,
+                        new CustomError("Email is already in use", 400)
+                    );
+                }
+            }
+
+            // Proceed with updating the user profile
+            const updatedUser = await User.findByIdAndUpdate(
+                req.user._id,
+                { ...data },
+                { new: true } // `new: true` returns the updated document
+            );
 
             return logger.respondWithData(
                 res,
@@ -61,40 +73,6 @@ class UserController {
             return logger.respondWithError(
                 res,
                 new CustomError(error.message, 500)
-            );
-        }
-    }
-
-    /**
-     * @route GET /profile/check-user?username=<username>
-     * @description Check if username is already taken
-     * @access Protected
-     * @expected-response {object} - Object containing the status if the username is already taken
-     * @error-handling - Returns a 500 error if an unexpected error occurs during the retrieval process
-     */
-    async checkUserName(req: Request, res: Response): Promise<void> {
-        try {
-            const username = req.query.username;
-            const user = await User.findOne({ username });
-
-            if (user) {
-                return logger.respondWithData(
-                    res,
-                    { success: false, message: "Username taken" },
-                    400
-                );
-            } else {
-                return logger.respondWithData(
-                    res,
-                    { success: true, message: "Username available" },
-                    200
-                );
-            }
-        } catch (err: any) {
-            console.log("Error fetching account info", err);
-            return logger.respondWithError(
-                res,
-                new CustomError(err.message, 500)
             );
         }
     }
@@ -156,9 +134,6 @@ class UserController {
         try {
             const { currentPassword, newPassword } = req.body;
 
-            console.log(currentPassword);
-            console.log(newPassword);
-
             const user = await User.findById(req.user._id);
 
             if (!currentPassword || !newPassword) {
@@ -184,12 +159,10 @@ class UserController {
                 user.password
             );
 
-            console.log(isPasswordValid);
-
             if (!isPasswordValid) {
                 return logger.respondWithError(
                     res,
-                    new CustomError("Current password is incorrect", 401)
+                    new CustomError("Current password is incorrect", 400)
                 );
             }
 
@@ -201,50 +174,6 @@ class UserController {
                 res,
                 {
                     message: "Password changed successfully",
-                },
-                200
-            );
-        } catch (error: any) {
-            return logger.respondWithError(
-                res,
-                new CustomError(error.message, 500)
-            );
-        }
-    }
-
-    /**
-     * @route POST /profile/update-contact-info/:userId
-     * @description Update user's contact info
-     * @access Protected
-     * @input {string} address - User's address
-     * @input {string} state - User's state
-     * @input {string} zipcode - User's zipcode
-     * @input {string} country - User's country
-     * @expected-response {object} - Object containing a message indicating success or failure, along with the updated user's contact infp
-     * @error-handling - Returns a 500 error if an unexpected error occurs during the updating process
-     */
-    async updateContactInfo(req: Request, res: Response): Promise<void> {
-        try {
-            const { address, state, zipcode, country } = req.body;
-
-            const updatedUser = await User.findByIdAndUpdate(
-                req.user._id,
-                { address, state, zipcode, country },
-                { new: true }
-            );
-
-            if (!updatedUser) {
-                return logger.respondWithError(
-                    res,
-                    new CustomError("User not found", 404)
-                );
-            }
-
-            return logger.respondWithData(
-                res,
-                {
-                    message: "Contact information updated successfully",
-                    user: updatedUser,
                 },
                 200
             );
@@ -277,7 +206,11 @@ class UserController {
                 );
             }
 
-            return logger.respondWithData(res, { user }, 200);
+            return logger.respondWithData(
+                res,
+                { user, ipAddress: req.userIp },
+                200
+            );
         } catch (error: any) {
             return logger.respondWithError(
                 res,

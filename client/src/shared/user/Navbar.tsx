@@ -6,35 +6,39 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
-import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
+import History from "@mui/icons-material/History";
+import Verified from "@mui/icons-material/Verified";
 import Logout from "@mui/icons-material/Logout";
+import { useUser } from "../../context/UserContext";
 
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../../features/auth/authApiSlice";
-import { IoChevronDown } from "react-icons/io5";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Navbar = ({ toggleSidebar, profile }: any) => {
+const Navbar = ({ toggleSidebar }: any) => {
     const navigate = useNavigate();
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
+
     const handleClose = () => {
         setAnchorEl(null);
     };
 
     const [logout, { isSuccess }] = useLogoutMutation();
 
+    const handleLogout = async () => {
+        await logout({});
+    };
+
     useEffect(() => {
         if (isSuccess) {
-            localStorage.removeItem("accessToken");
-            navigate("/");
+            navigate("/secure/sign-in");
         }
     }, [isSuccess, navigate]);
 
@@ -116,19 +120,10 @@ const Navbar = ({ toggleSidebar, profile }: any) => {
                     transformOrigin={{ horizontal: "right", vertical: "top" }}
                     anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                 >
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={() => navigate("profile")}>
                         <Avatar /> Profile
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                        <Avatar /> My account
-                    </MenuItem>
                     <Divider />
-                    <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                            <PersonAdd fontSize="small" />
-                        </ListItemIcon>
-                        Add another account
-                    </MenuItem>
                     <MenuItem onClick={handleClose}>
                         <ListItemIcon>
                             <Settings fontSize="small" />
@@ -136,6 +131,12 @@ const Navbar = ({ toggleSidebar, profile }: any) => {
                         Settings
                     </MenuItem>
                     <MenuItem onClick={handleClose}>
+                        <ListItemIcon>
+                            <Verified fontSize="small" />
+                        </ListItemIcon>
+                        KYC
+                    </MenuItem>
+                    <MenuItem onClick={handleLogout}>
                         <ListItemIcon>
                             <Logout fontSize="small" />
                         </ListItemIcon>

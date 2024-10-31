@@ -7,7 +7,7 @@ const Transaction = () => {
 
     const transactions = transactionsData?.transactions || [];
     return (
-        <div className="bg-gray-100">
+        <div className="bg-dashboard">
             <div className="container mx-auto p-4">
                 <TransactionsTable transactions={transactions} />
             </div>

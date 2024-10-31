@@ -89,7 +89,7 @@ const Register = () => {
                     <p className="text-lg font-semibold">
                         Already have an account?{" "}
                         <Link
-                            to={"/auth/sign-in"}
+                            to={"/secure/sign-in"}
                             className="text-alternate underline hover:text-primary"
                         >
                             Sign In

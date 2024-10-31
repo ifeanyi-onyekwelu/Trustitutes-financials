@@ -1,35 +1,38 @@
 import FirstSection from "../../components/userPages/dashboard/FirstSection";
-import {
-    useFetchUserProfileQuery,
-    useFetchUserAccountQuery,
-    useFetchTransactionsQuery,
-} from "./userApiSlice";
+import { useFetchUserAccountQuery } from "./userApiSlice";
 import "../../assets/css/Dashboard.css";
 import { useState, useEffect } from "react";
 import Overview from "../../components/userPages/dashboard/Overview";
 import CurrentAccount from "../../components/userPages/dashboard/CurrentAccount";
 import LineOfCredit from "../../components/userPages/dashboard/LineOfCredit";
 import Support from "../../components/userPages/dashboard/Support";
+import { useUser } from "../../context/UserContext";
 
 const Dashboard = () => {
-    const { data: profileData } = useFetchUserProfileQuery("userProfile");
+    const userData: any = useUser();
     const { data: accountData } = useFetchUserAccountQuery("userAccount");
 
-    const profile = profileData?.user || {};
     const account = accountData?.account || {};
+    console.log("Account", account);
 
     return (
         <div className="p-6 min-h-screen space-y-6">
-            <FirstSection fullName="Sarah Oprah" />
+            <FirstSection
+                fullName={`${userData?.user?.firstName} ${userData?.user?.lastName}`}
+            />
 
             <div className="flex md:space-x-5 space-x-0 md:flex-row flex-col py-5 md:space-y-0 space-y-5">
                 <Overview
-                    balance={0}
-                    fullName="Sarah Oprah"
+                    balance={account?.balance}
+                    fullName={`${userData?.user?.firstName} ${userData?.user?.lastName}`}
                     lastLogin="15 December 2020"
+                    ip={userData?.ipAddress}
                 />
                 <div className="flex flex-col space-y-5 w-full md:w-1/2">
-                    <CurrentAccount balance={0} accountNumber={0} />
+                    <CurrentAccount
+                        balance={account?.balance}
+                        accountNumber={account?.accountNumber}
+                    />
                     <LineOfCredit />
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import baseApi from "../../services/apiSlice";
-import { logout } from "./authSlice";
+import { logout as logOut } from "./authSlice";
 
 export const authApiSlice = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -31,7 +31,7 @@ export const authApiSlice = baseApi.injectEndpoints({
             }),
             async onQueryStarted(_, { dispatch }) {
                 try {
-                    dispatch(logout());
+                    dispatch(logOut());
                     setTimeout(() => {
                         dispatch(baseApi.util.resetApiState());
                     }, 1000);

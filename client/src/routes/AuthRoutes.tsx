@@ -14,11 +14,11 @@ function AuthRoutes() {
                 <Route path="sign-up" element={<Register />} />
                 <Route path="forgot-password" element={<ForgotPassword />} />
                 <Route
-                    path="admin/panel/auth/sign-up"
+                    path="admin/panel/secure/sign-up"
                     element={<AdminRegister />}
                 />
                 <Route
-                    path="admin/panel/auth/sign-in"
+                    path="admin/panel/secure/sign-in"
                     element={<AdminLogin />}
                 />
             </Route>

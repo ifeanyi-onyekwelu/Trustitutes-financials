@@ -54,7 +54,7 @@ const Account = () => {
                                 the benefits!
                             </p>
                             <div className="flex justify-center space-x-4">
-                                <LinkBtn href="/auth/sign-up">
+                                <LinkBtn href="/secure/sign-up">
                                     Apply Now
                                 </LinkBtn>
                             </div>

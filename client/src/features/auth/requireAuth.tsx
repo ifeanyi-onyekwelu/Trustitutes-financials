@@ -10,7 +10,7 @@ const RequireAuth = ({ allowedRoles }: any) => {
     ) ? (
         <Outlet />
     ) : (
-        <Navigate to="/auth/sign-in" state={{ from: location }} replace />
+        <Navigate to="/secure/sign-in" state={{ from: location }} replace />
     );
 
     return content;

@@ -29,7 +29,7 @@ const InputField = ({
                 value={value}
                 name={name}
                 onChange={onChange}
-                className="w-full py-2 px-4 bg-gray-900 text-gray-400 border rounded-md border-gray-300 focus:border-blue-800 focus:outline-none font-medium"
+                className="w-full py-2 px-4 bg-gray-900 text-gray-100 border rounded-md border-gray-300 focus:border-blue-800 focus:outline-none font-medium"
                 placeholder={placeholder}
                 required={required}
             />

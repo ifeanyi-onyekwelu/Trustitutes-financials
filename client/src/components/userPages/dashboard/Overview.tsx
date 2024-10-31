@@ -1,18 +1,20 @@
 import Avatar from "@mui/material/Avatar";
 import Image from "../../../assets/img/avatar.avif";
+import formatAmount from "../../../config/formatAmount";
 
 interface Props {
     balance: number;
     lastLogin: string;
     fullName: string;
+    ip: string;
 }
 
-const Overview = ({ balance, lastLogin, fullName }: Props) => {
+const Overview = ({ balance, lastLogin, fullName, ip }: Props) => {
     return (
         <div className="w-full md:w-1/2">
             <h3 className="text-xl text-white font-semibold mb-5">Overview</h3>
-            <div className="flex md:flex-row flex-col md:items-center items-start px-8 md:py-12 py-6 rounded-lg bg-blue-950 md:space-x-14 space-x-0 md:space-y-0 space-y-6">
-                <div className="flex flex-col space-y-5">
+            <div className="flex md:flex-row flex-col md:items-center items-start px-8 md:py-12 py-6 rounded-lg bg-blue-950 md:space-x-10 space-x-0 md:space-y-0 space-y-6">
+                <div className="flex flex-col space-y-5 w-1/2">
                     <Avatar
                         alt="Avatar"
                         src={Image}
@@ -33,10 +35,10 @@ const Overview = ({ balance, lastLogin, fullName }: Props) => {
                             Available balance
                         </p>
                         <h3 className="text-white font-bold text-2xl">
-                            USD {balance ? balance : 498_128}
+                            USD {balance && formatAmount(balance)}
                         </h3>
-                        <p className="text-lg text-gray-600">
-                            {fullName ? fullName : "Sarah Oprah"}
+                        <p className="text-lg text-gray-400">
+                            {fullName ? fullName : "Unknown User"}
                         </p>
                     </div>
 
@@ -44,7 +46,7 @@ const Overview = ({ balance, lastLogin, fullName }: Props) => {
                         <p className="text-blue-500 font-semibold">
                             Your IP address
                         </p>
-                        <p className="text-white">172.122.123.122</p>
+                        <p className="text-white">{ip}</p>
                     </div>
                 </div>
             </div>

@@ -134,7 +134,7 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
                     <TableRow>
                         <TableCell>Date</TableCell>
                         <TableCell>Type</TableCell>
-                        <TableCell align="right">Amount</TableCell>
+                        <TableCell>Amount</TableCell>
                         <TableCell>Status</TableCell>
                         <TableCell>Reference</TableCell>
                         <TableCell>Description</TableCell>

@@ -11,10 +11,10 @@ const FundAccount = () => {
     return (
         <div className="container mx-auto p-6 border border-gray-200 rounded-lg">
             <header className="text-center mb-8">
-                <h1 className="text-3xl font-semibold text-gray-800">
+                <h1 className="text-3xl font-semibold text-gray-300">
                     Fund Your Account
                 </h1>
-                <p className="text-gray-500 mt-2">
+                <p className="text-gray-300 mt-2">
                     Add funds to your account securely and start managing your
                     investments.
                 </p>
@@ -31,10 +31,10 @@ const FundAccount = () => {
                 <div className="flex-1 space-y-6">
                     {/* Information Section */}
                     <section className="p-4 border border-gray-200 rounded-lg">
-                        <h2 className="text-lg font-semibold text-gray-700">
+                        <h2 className="text-lg font-semibold text-gray-300">
                             Important Tips
                         </h2>
-                        <ul className="list-disc list-inside text-gray-600 mt-2 space-y-1">
+                        <ul className="list-disc list-inside text-gray-300 mt-2 space-y-1">
                             <li>
                                 Ensure all account information is correct before
                                 proceeding.

@@ -3,6 +3,7 @@ import { useState } from "react";
 import Sidebar from "../shared/user/Sidebar";
 import Navbar from "../shared/user/Navbar";
 import { useFetchUserProfileQuery } from "../features/user/userApiSlice";
+import { UserProvider } from "../context/UserContext";
 
 const UserDashboardLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -18,22 +19,21 @@ const UserDashboardLayout = () => {
     } = useFetchUserProfileQuery("userProfile");
 
     if (isLoading) return <p>Loading...</p>;
-
     if (isError) return <p>An error occurred...</p>;
 
-    const content = (
-        <div className="flex bg-[#0A0F2C]">
-            <Sidebar isOpen={isSidebarOpen} />
-            <div className="md:ml-[25%] flex flex-col w-full md:w-[80%]">
-                <Navbar toggleSidebar={toggleSidebar} profile={profile} />
-                <main className="flex-1 overflow-auto p-6 min-h-screen">
-                    <Outlet />
-                </main>
+    return (
+        <UserProvider profile={profile}>
+            <div className="flex bg-[#0A0F2C]">
+                <Sidebar />
+                <div className="md:ml-[20%] flex flex-col w-full md:w-[80%]">
+                    <Navbar toggleSidebar={toggleSidebar} profile={profile} />
+                    <main className="flex-1 overflow-auto p-6 min-h-screen">
+                        <Outlet />
+                    </main>
+                </div>
             </div>
-        </div>
+        </UserProvider>
     );
-
-    return content;
 };
 
 export default UserDashboardLayout;

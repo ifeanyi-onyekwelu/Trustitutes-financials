@@ -14,7 +14,7 @@ const LineOfCredit = () => {
                 </Link>
             </div>
 
-            <div className="rounded-lg flex md:space-x-4 space-x-0 items-center">
+            <div className="rounded-lg flex md:flex-row flex-col md:space-x-4 space-x-0 items-center md:space-y-0 space-y-5">
                 <div className="w-full md:w-1/2 bg-gray-900 p-5  rounded-lg">
                     <div className="flex space-x-2 mb-2">
                         <IoCheckmarkCircle className="p-3 rounded-full bg-blue-50 text-gray-400" />

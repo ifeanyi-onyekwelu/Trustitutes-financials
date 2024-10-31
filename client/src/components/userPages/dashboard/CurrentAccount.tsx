@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { IoWallet } from "react-icons/io5";
+import formatAmount from "../../../config/formatAmount";
 
 interface Props {
     balance: number;
@@ -13,7 +14,7 @@ const CurrentAccount = ({ balance, accountNumber }: Props) => {
                 <h3 className="text-xl text-white font-semibold">
                     Current Account
                 </h3>
-                <Link to="/transfer" className="text-blue-700 font-semibold">
+                <Link to="transfer" className="text-blue-700 font-semibold">
                     Transfer Fund
                 </Link>
             </div>
@@ -22,11 +23,11 @@ const CurrentAccount = ({ balance, accountNumber }: Props) => {
                 <div className="flex space-x-5">
                     <IoWallet className="p-3 rounded-full bg-blue-50 text-gray-400" />
                     <span className="text-gray-400 font-bold">
-                        ********51612
+                        {accountNumber}
                     </span>
                 </div>
                 <div className="flex space-x-1 items-center text-gray-400">
-                    <p className="font-bold text-xl">493,128</p>
+                    <p className="font-bold text-xl">{formatAmount(balance)}</p>
                     <p className="text-xl">USD</p>
                 </div>
             </div>

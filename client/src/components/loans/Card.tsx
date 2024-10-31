@@ -27,7 +27,7 @@ const Card = ({ children }: any) => {
 
             {/* CTA Section */}
             <div className="flex items-center justify-center w-full mt-auto">
-                <LinkBtn href="/auth/sign-up">Open Account </LinkBtn>
+                <LinkBtn href="/secure/sign-up">Open Account </LinkBtn>
             </div>
         </div>
     );

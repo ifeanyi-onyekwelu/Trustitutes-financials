@@ -94,7 +94,7 @@ const Login = () => {
                     <p className="text-lg font-semibold">
                         Don't have an account?{" "}
                         <Link
-                            to={"/auth/sign-up"}
+                            to={"/secure/sign-up"}
                             className="text-alternate underline hover:text-primary"
                         >
                             Sign Up

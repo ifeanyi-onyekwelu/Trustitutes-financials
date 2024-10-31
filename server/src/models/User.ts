@@ -14,6 +14,9 @@ interface IUser {
     profilePicture: string;
     address: string;
     state: string;
+    city: string;
+    phoneNumber: string;
+    ssn: string;
     zipcode: string;
     country: string;
     roles: IRole[];
@@ -54,6 +57,9 @@ const userSchema = new Schema<IUser>(
             type: String,
         },
         address: String,
+        city: String,
+        phoneNumber: String,
+        ssn: String,
         state: String,
         zipcode: String,
         country: String,

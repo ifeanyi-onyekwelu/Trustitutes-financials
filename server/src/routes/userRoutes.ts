@@ -3,6 +3,7 @@ import UserController from "@/controllers/userController";
 
 import protect from "@/middlewares/authMiddleware";
 import checkUserSetup from "@/middlewares/checkUserSetup";
+import getUserIp from "@/middlewares/getUserIp";
 
 const router = express.Router();
 const userController = new UserController();
@@ -18,14 +19,9 @@ router.post(
     protect,
     userController.uploadProfileImage
 );
-router.get("/check-username", protect, userController.checkUserName);
 router.post("/change-password", protect, userController.changePassword);
-router.post(
-    "/update-contact-information",
-    protect,
-    userController.updateContactInfo
-);
-router.get("/get-profile", protect, userController.getUserProfile);
+
+router.get("/get-profile", protect, getUserIp, userController.getUserProfile);
 router.get("/get-account", protect, userController.getUserAccount);
 
 router.post("/delete-account", protect, userController.deleteAccount);

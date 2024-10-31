@@ -9,7 +9,7 @@ export default function App() {
         <Router>
             <Routes>
                 <Route path="/*" element={<PublicRoutes />} />
-                <Route path="auth/*" element={<AuthRoutes />} />
+                <Route path="secure/*" element={<AuthRoutes />} />
                 <Route path="admin/dashboard/*" element={<AdminRoutes />} />
                 <Route path="user/dashboard/*" element={<UserRoutes />} />
             </Routes>

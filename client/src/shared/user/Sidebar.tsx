@@ -4,10 +4,16 @@ import { AiFillCreditCard } from "react-icons/ai";
 import { RiExchangeDollarLine } from "react-icons/ri";
 import { VscHistory } from "react-icons/vsc";
 import { Link, useLocation } from "react-router-dom";
+import { useFetchUserAccountQuery } from "../../features/user/userApiSlice";
+import formatAmount from "../../config/formatAmount";
 
-const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
+const Sidebar = () => {
     const location = useLocation();
     const { pathname } = location;
+
+    const { data: accountData } = useFetchUserAccountQuery("userAccount");
+    const account = accountData?.account || {};
+    console.log(account);
 
     const menuItems = [
         {
@@ -31,11 +37,6 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
             icon: <AiFillCreditCard className="w-5 h-5" />,
         },
         {
-            to: "loan",
-            label: "Loan/Credit Funding",
-            icon: <RiExchangeDollarLine className="w-5 h-5" />,
-        },
-        {
             to: "transactions",
             label: "Transaction History",
             icon: <VscHistory className="w-5 h-5" />,
@@ -44,7 +45,7 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
 
     return (
         <div
-            className={`bg-[#0A0F2C] text-white w-[25%] fixed transition-all duration-200 ease-in-out md:block hidden border-r border-gray-700 overflow-auto h-screen`}
+            className={`bg-dashboard text-white w-[20%] fixed transition-all duration-200 ease-in-out md:block hidden border-r border-gray-700 overflow-auto h-screen`}
             id="sidebar"
         >
             <div className="border-b border-gray-700 p-5 mb-10">
@@ -57,11 +58,17 @@ const Sidebar = ({ isOpen }: { isOpen: boolean }) => {
                 </h3>
                 <div className="flex justify-between">
                     <h1 className="text-3xl text-blue-500">
-                        <span className="font-extrabold">498,128</span> USD
+                        <span className="font-extrabold">
+                            {formatAmount(account.balance)}
+                        </span>{" "}
+                        USD
                     </h1>
                 </div>
                 <p className="text-gray-300">
-                    <span className="font-extrabold">498,128</span> USD
+                    <span className="font-extrabold">
+                        {formatAmount(account.balance)}
+                    </span>{" "}
+                    USD
                 </p>
             </div>
 

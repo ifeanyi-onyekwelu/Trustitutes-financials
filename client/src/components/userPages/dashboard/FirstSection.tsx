@@ -1,6 +1,7 @@
 import Button from "@mui/material/Button";
 import { MdOutlineArrowRightAlt } from "react-icons/md";
 import Stack from "@mui/material/Stack";
+import { useNavigate } from "react-router-dom";
 
 type FirstSectionProps = {
     fullName: string;
@@ -14,10 +15,16 @@ const FirstSection = ({ fullName }: FirstSectionProps) => {
         return "Good evening";
     };
 
+    const navigate = useNavigate();
+
+    const navigateToDeposit = () => navigate("deposit");
+
+    const navigateToTransfer = () => navigate("transfer");
+
     const content = (
         <div className="flex md:flex-row flex-col md:items-center items-start justify-between border-2 border-gray-800 p-5 md:space-y-0 space-y-5 rounded">
             <div className="greet text-white">
-                <h2 className="font-medium md:text-3xl text-2xl">
+                <h2 className="font-medium md:text-2xl text-md">
                     {getGreeting()} {fullName}
                 </h2>
                 <p>At a glance summary of your account!</p>
@@ -27,6 +34,7 @@ const FirstSection = ({ fullName }: FirstSectionProps) => {
                 <Button
                     variant="contained"
                     endIcon={<MdOutlineArrowRightAlt />}
+                    onClick={navigateToDeposit}
                 >
                     Deposit
                 </Button>
@@ -34,6 +42,7 @@ const FirstSection = ({ fullName }: FirstSectionProps) => {
                     variant="contained"
                     endIcon={<MdOutlineArrowRightAlt />}
                     sx={{ bgcolor: "gray" }}
+                    onClick={navigateToTransfer}
                 >
                     Transfer fund
                 </Button>
