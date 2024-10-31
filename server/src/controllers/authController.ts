@@ -72,22 +72,16 @@ class AuthController {
      */
     async register(req: Request, res: Response): Promise<void> {
         try {
-            const { firstName, lastName, username, email, password, roles } =
-                req.body;
-
-            console.log("ROLES: ", roles);
+            const data = req.body;
 
             const user = new User({
-                firstName,
-                lastName,
-                username,
-                email,
-                password,
+                ...data,
                 roles:
-                    roles && roles.includes("admin")
+                    data.roles && data.roles.includes("admin")
                         ? ["user", "admin"]
                         : ["user"],
             });
+
             await user.save();
 
             const account = await Account.create({
@@ -98,9 +92,11 @@ class AuthController {
 
             return logger.respond(
                 res,
-                `${roles && roles.includes("admin") ? "Admin" : "User"} ${
-                    user.firstName
-                } ${user.lastName} registered successfully!`
+                `${
+                    data.roles && data.roles.includes("admin")
+                        ? "Admin"
+                        : "User"
+                } ${user.firstName} ${user.lastName} registered successfully!`
             );
         } catch (error: any) {
             return logger.respondWithError(

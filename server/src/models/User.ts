@@ -7,6 +7,7 @@ interface IRole {
 
 interface IUser {
     firstName: string;
+    middleName: string;
     lastName: string;
     email: string;
     password: string;
@@ -32,6 +33,10 @@ const userSchema = new Schema<IUser>(
             required: true,
         },
         lastName: {
+            type: String,
+            required: true,
+        },
+        middleName: {
             type: String,
             required: true,
         },
