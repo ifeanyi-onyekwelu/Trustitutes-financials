@@ -1,80 +1,54 @@
-"use client";
+import React from "react";
+import Box from "@mui/material/Box";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
-import { useState } from "react";
-import {
-    Dialog,
-    DialogBackdrop,
-    DialogPanel,
-    DialogTitle,
-} from "@headlessui/react";
-import {
-    ExclamationTriangleIcon,
-    CheckCircleIcon,
-} from "@heroicons/react/24/outline";
-
-interface Props {
-    successMessage: string;
+interface AlertMessageProps {
     errorMessage: string;
-    statusType: string;
+    successMessage: string;
+    statusType: "error" | "success";
     showAlert: boolean;
-    setShowAlert: any;
+    setShowAlert: (open: boolean) => void;
 }
 
-const Alert = ({
-    successMessage,
+const AlertMessage = ({
     errorMessage,
+    successMessage,
     statusType,
     showAlert,
     setShowAlert,
-}: Props) => {
+}: AlertMessageProps) => {
+    const handleClose = (_?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setShowAlert(false);
+    };
+
+    // Determine the message to display
     const message = statusType === "error" ? errorMessage : successMessage;
-    console.log("MESSAGE", message);
-    const icon =
-        statusType === "error" ? (
-            <ExclamationTriangleIcon
-                aria-hidden="true"
-                className="h-6 w-6 text-red-600"
-            />
-        ) : (
-            <CheckCircleIcon
-                aria-hidden="true"
-                className="h-6 w-6 text-green-600"
-            />
-        );
-    const textColor =
-        statusType === "error" ? "text-red-600" : "text-green-600";
 
     return (
-        <Dialog
-            open={showAlert}
-            onClose={() => setShowAlert(false)}
-            className="relative z-10 top-0 right-0"
-        >
-            <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-
-            <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-                <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                    <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                        <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                            <div className="sm:flex sm:items-center">
-                                <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                                    {icon}
-                                </div>
-                                <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                                    <DialogTitle
-                                        as="h3"
-                                        className={`text-base font-semibold leading-6 ${textColor}`}
-                                    >
-                                        {message}
-                                    </DialogTitle>
-                                </div>
-                            </div>
-                        </div>
-                    </DialogPanel>
-                </div>
-            </div>
-        </Dialog>
+        <Box sx={{ width: 500 }}>
+            <Snackbar
+                open={showAlert}
+                autoHideDuration={3000}
+                onClose={handleClose}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            >
+                <Alert
+                    onClose={handleClose}
+                    severity={statusType} // "error" or "success" sets the color
+                    sx={{
+                        width: "100%",
+                    }}
+                    variant="filled"
+                >
+                    {message}
+                </Alert>
+            </Snackbar>
+        </Box>
     );
 };
 
-export default Alert;
+export default AlertMessage;

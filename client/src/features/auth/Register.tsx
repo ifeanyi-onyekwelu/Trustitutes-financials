@@ -1,59 +1,72 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import FormGroup from "../../components/common/FormGroup";
+import { Button } from "@mui/material";
 import Image from "../../assets/img/auth.jpg";
 import { useRegisterMutation } from "./authApiSlice";
 import Alert from "../../components/common/Alert";
+import InputField from "../../components/common/InputField";
 
 interface FormData {
     firstName: string;
     lastName: string;
-    username: string;
+    middleName: string;
+    country: string;
+    state: string;
+    city: string;
+    zipcode: string;
+    address: string;
+    phoneNumber: string;
     email: string;
     password: string;
+    password2: string;
 }
 
 const Register = () => {
     const [formData, setFormData] = useState<FormData>({
         firstName: "",
+        middleName: "",
         lastName: "",
-        username: "",
+        country: "",
+        state: "",
+        city: "",
+        zipcode: "",
+        address: "",
+        phoneNumber: "",
         email: "",
         password: "",
+        password2: "",
     });
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
-    const [statusType, setStatusType] = useState<string>("");
+    const [statusType, setStatusType] = useState<"error" | "success">("error");
     const [showAlert, setShowAlert] = useState<boolean>(false);
 
     const navigate = useNavigate();
-
-    const [login, { isLoading }] = useRegisterMutation();
+    const [register, { isLoading }] = useRegisterMutation();
 
     const handleOnSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await login({
+            const response = await register({
                 ...formData,
                 roles: ["user"],
             }).unwrap();
-            console.log("RESPONSE:", response);
 
             setSuccessMessage("Registration Successful");
             setStatusType("success");
             setShowAlert(true);
+
+            setTimeout(() => {
+                navigate("/secure/sign-in");
+            }, 3000);
         } catch (error: any) {
-            console.log("ERROR:", error);
-            console.log("ERROR:", error);
             if (error.status === "FETCH_ERROR") {
                 setErrorMessage("No server responded!");
-                setShowAlert(true);
-                setStatusType("error");
             } else {
                 setErrorMessage(error.data.message);
-                setStatusType("error");
-                setShowAlert(true);
             }
+            setStatusType("error");
+            setShowAlert(true);
         }
     };
 
@@ -66,90 +79,178 @@ const Register = () => {
     };
 
     return (
-        <section className="w-full p-3 md:h-screen bg-gray-50">
-            <div className="flex flex-row md:space-x-3 h-full">
-                <div className="w-1/2 md:flex hidden relative">
-                    <img
-                        src={Image}
-                        alt="Auth Image"
-                        className="w-full h-full object-cover rounded-md"
-                    />
-                    <Link
-                        to="/"
-                        className="absolute top-4 right-4 text-white backdrop-blur-md bg-white/30 px-3 py-1 rounded transition hover:bg-white/50"
-                    >
-                        Back to Site
-                    </Link>
-                </div>
+        <>
+            <section
+                className="w-full h-fit flex items-center justify-center bg-cover bg-center relative py-5"
+                style={{
+                    backgroundImage: `url(${Image})`,
+                    backgroundAttachment: "fixed",
+                }}
+            >
+                <div className="absolute inset-0 bg-black opacity-50"></div>
 
-                <div className="md:w-1/2 w-full p-16 px-28 flex flex-col justify-center space-y-6">
-                    <h1 className="font-extrabold md:text-5xl text-3xl text-primary">
+                <div className="relative bg-white bg-opacity-90 p-8 rounded-md w-full max-w-5xl mx-4 space-y-6 z-10 shadow-lg">
+                    <h1 className="font-extrabold text-3xl md:text-4xl text-primary text-center">
                         Create an account
                     </h1>
-                    <p className="text-lg font-semibold">
+                    <p className="text-center text-lg font-semibold">
                         Already have an account?{" "}
                         <Link
-                            to={"/secure/sign-in"}
+                            to="/secure/sign-in"
                             className="text-alternate underline hover:text-primary"
                         >
                             Sign In
                         </Link>
                     </p>
 
-                    <form onSubmit={handleOnSubmit}>
-                        <div className="flex md:flex-row flex-col md:gap-4">
-                            <FormGroup
-                                value={formData.firstName}
-                                name="firstName"
+                    <form onSubmit={handleOnSubmit} className="space-y-4">
+                        <div className="flex flex-col md:flex-row md:space-y-0 space-y-4">
+                            <InputField
                                 label="First Name"
+                                value={formData.firstName}
                                 onChange={handleOnChange}
+                                name="firstName"
+                                type="text"
+                                placeholder="First Name"
+                                required
                             />
-                            <FormGroup
-                                value={formData.lastName}
-                                name="lastName"
-                                label="Last Name"
+                            <InputField
+                                label="Middle Name"
+                                value={formData.middleName}
                                 onChange={handleOnChange}
+                                name="middleName"
+                                placeholder="Middle Name"
+                                type="text"
+                                required
+                            />
+                            <InputField
+                                label="Last Name"
+                                value={formData.lastName}
+                                onChange={handleOnChange}
+                                name="lastName"
+                                placeholder="Last Name"
+                                type="text"
+                                required
                             />
                         </div>
-                        <FormGroup
-                            value={formData.username}
-                            name="username"
-                            label="Username"
+                        <div className="flex md:space-x-5 md:flex-row flex-col w-full md:space-y-0 space-y-4">
+                            <InputField
+                                label="Country"
+                                value={formData.country}
+                                onChange={handleOnChange}
+                                name="country"
+                                type="text"
+                                placeholder="Country"
+                                required
+                            />
+                            <InputField
+                                label="State"
+                                value={formData.state}
+                                onChange={handleOnChange}
+                                name="state"
+                                type="text"
+                                placeholder="State"
+                                required
+                            />
+                            <InputField
+                                label="City"
+                                value={formData.city}
+                                onChange={handleOnChange}
+                                name="city"
+                                type="text"
+                                placeholder="City"
+                                required
+                            />
+                            <InputField
+                                label="Zipcode"
+                                value={formData.zipcode}
+                                onChange={handleOnChange}
+                                name="zipcode"
+                                type="text"
+                                placeholder="Zipcode"
+                                required
+                            />
+                        </div>
+
+                        <InputField
+                            label="Address"
+                            value={formData.address}
                             onChange={handleOnChange}
-                            type="username"
+                            name="address"
+                            type="text"
+                            placeholder="Address"
+                            required
                         />
-                        <FormGroup
-                            value={formData.email}
-                            name="email"
-                            label="Email Address"
-                            onChange={handleOnChange}
-                            type="email"
-                        />
-                        <FormGroup
-                            value={formData.password}
-                            name="password"
-                            label="Password"
-                            onChange={handleOnChange}
-                            type="password"
-                        />
-                        <button
+
+                        <div className="flex md:space-x-5 md:flex-row flex-col w-full md:space-y-0 space-y-4">
+                            <InputField
+                                label="Email Address"
+                                value={formData.email}
+                                onChange={handleOnChange}
+                                name="email"
+                                type="email"
+                                placeholder="Email Address"
+                                required
+                            />
+                            <InputField
+                                label="Phone Number"
+                                value={formData.phoneNumber}
+                                onChange={handleOnChange}
+                                name="phoneNumber"
+                                type="text"
+                                placeholder="Phone Number"
+                                required
+                            />
+                        </div>
+
+                        <div className="flex md:space-x-5 md:flex-row flex-col w-full md:space-y-0 space-y-4">
+                            <InputField
+                                label="Password"
+                                value={formData.password}
+                                onChange={handleOnChange}
+                                name="password"
+                                type="password"
+                                placeholder="Password"
+                                required
+                            />
+                            <InputField
+                                label="Re-enter Password"
+                                value={formData.password2}
+                                onChange={handleOnChange}
+                                name="password2"
+                                type="password"
+                                placeholder="Re-enter Password"
+                                required
+                            />
+                        </div>
+
+                        <Button
+                            variant="contained"
                             type="submit"
-                            className="w-full bg-primary text-white font-semibold rounded-lg p-3 transition-all duration-300 hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary"
+                            disabled={isLoading}
                         >
                             Register
-                        </button>
+                        </Button>
                     </form>
+                    <Link
+                        to="/"
+                        className="text-sm text-primary hover:underline"
+                    >
+                        Back to Site
+                    </Link>
                 </div>
-            </div>
+            </section>
 
-            <Alert
-                successMessage={successMessage}
-                errorMessage={errorMessage}
-                statusType={statusType}
-                showAlert={showAlert}
-                setShowAlert={setShowAlert}
-            />
-        </section>
+            {showAlert && (
+                <Alert
+                    successMessage={successMessage}
+                    errorMessage={errorMessage}
+                    statusType={statusType}
+                    showAlert={showAlert}
+                    setShowAlert={setShowAlert}
+                />
+            )}
+        </>
     );
 };
 

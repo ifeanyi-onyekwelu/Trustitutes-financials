@@ -47,7 +47,7 @@ const Header = () => {
                     <div className="flex items-center">
                         <Link
                             className="text-primary hover:text-text px-3 py-2 text-md font-black"
-                            to={"/secure/sign-up"}
+                            to={"/secure/sign-in"}
                         >
                             Sign In
                         </Link>

@@ -1,26 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import FormGroup from "../../components/common/FormGroup";
+import { Button } from "@mui/material";
 import Image from "../../assets/img/auth.jpg";
 import { useLoginMutation } from "./authApiSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { setCredentials } from "./authSlice";
 import Alert from "../../components/common/Alert";
+import InputField from "../../components/common/InputField";
 
 interface FormData {
-    emailOrUsername: string;
+    accountNumber: string;
     password: string;
 }
 
 const Login = () => {
     const [formData, setFormData] = useState<FormData>({
-        emailOrUsername: "",
+        accountNumber: "",
         password: "",
     });
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
-    const [statusType, setStatusType] = useState<string>("");
+    const [statusType, setStatusType] = useState<"error" | "success">("error");
     const [showAlert, setShowAlert] = useState<boolean>(false);
 
     const dispatch = useDispatch<AppDispatch>();
@@ -36,8 +37,6 @@ const Login = () => {
                 roles: ["user"],
             }).unwrap();
             const { accessToken } = response;
-            console.log("RESPONSE:", response);
-            console.log("ACCESS TOKEN:", accessToken);
 
             dispatch(setCredentials(accessToken));
 
@@ -49,7 +48,6 @@ const Login = () => {
                 navigate("/user/dashboard");
             }, 3000);
         } catch (error: any) {
-            console.log("ERROR:", error);
             if (error.status === "FETCH_ERROR") {
                 setErrorMessage("No server responded!");
                 setShowAlert(true);
@@ -71,77 +69,74 @@ const Login = () => {
     };
 
     return (
-        <section className="w-full p-3 md:h-screen bg-white">
-            <div className="flex flex-row md:space-x-3 h-full">
-                <div className="w-1/2 md:flex hidden relative">
-                    <img
-                        src={Image}
-                        alt="Auth Image"
-                        className="w-full h-full object-cover rounded-md"
-                    />
-                    <Link
-                        to="/"
-                        className="absolute top-4 right-4 text-white backdrop-blur-md bg-white/30 px-3 py-1 rounded transition hover:bg-white/50"
-                    >
-                        Back to Site
-                    </Link>
-                </div>
+        <>
+            <section
+                className="w-full h-screen bg-cover bg-center relative py-5 flex items-center justify-center"
+                style={{ backgroundImage: `url(${Image})` }}
+            >
+                <div className="absolute inset-0 bg-black opacity-50"></div>
 
-                <div className="md:w-1/2 w-full p-16 px-28 flex flex-col justify-center space-y-3">
-                    <h1 className="font-extrabold md:text-5xl text-3xl text-primary">
+                <div className="relative bg-white bg-opacity-90 p-8 rounded-md w-full max-w-md mx-4 space-y-6 z-10 shadow-lg">
+                    <h1 className="font-extrabold text-3xl text-primary text-center">
                         Login
                     </h1>
-                    <p className="text-lg font-semibold">
+                    <p className="text-lg font-semibold text-center">
                         Don't have an account?{" "}
                         <Link
                             to={"/secure/sign-up"}
-                            className="text-alternate underline hover:text-primary"
+                            className="text-text underline hover:text-primary"
                         >
                             Sign Up
                         </Link>
                     </p>
 
-                    <form onSubmit={handleOnSubmit}>
-                        <FormGroup
-                            value={formData.emailOrUsername}
-                            name="emailOrUsername"
-                            label="Email Address or Username"
+                    <form onSubmit={handleOnSubmit} className="space-y-2">
+                        <InputField
+                            label="Account Number"
+                            value={formData.accountNumber}
                             onChange={handleOnChange}
+                            name="accountNumber"
                             type="text"
+                            placeholder="Account Number"
+                            required
                         />
-                        <FormGroup
-                            value={formData.password}
-                            name="password"
+                        <InputField
                             label="Password"
+                            value={formData.password}
                             onChange={handleOnChange}
+                            name="password"
                             type="password"
+                            placeholder="Password"
+                            required
                         />
-                        <div className="flex items-center mb-5 gap-2">
-                            <input
-                                type="checkbox"
-                                name="rememberMe"
-                                id="rememberMe"
-                            />
-                            <label htmlFor="rememberMe">Remember Me</label>
-                        </div>
-                        <button
+
+                        <Button
+                            variant="contained"
                             type="submit"
-                            className="w-full bg-primary text-white font-semibold rounded-lg p-3 transition-all duration-300 hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary"
+                            disabled={isLoading}
                         >
                             Login
-                        </button>
+                        </Button>
                     </form>
+                    <Link
+                        to="/"
+                        className="text-sm text-primary hover:underline mt-5"
+                    >
+                        Back to Site
+                    </Link>
                 </div>
-            </div>
+            </section>
 
-            <Alert
-                successMessage={successMessage}
-                errorMessage={errorMessage}
-                statusType={statusType}
-                showAlert={showAlert}
-                setShowAlert={setShowAlert}
-            />
-        </section>
+            {showAlert && (
+                <Alert
+                    successMessage={successMessage}
+                    errorMessage={errorMessage}
+                    statusType={statusType}
+                    showAlert={showAlert}
+                    setShowAlert={setShowAlert}
+                />
+            )}
+        </>
     );
 };
 
