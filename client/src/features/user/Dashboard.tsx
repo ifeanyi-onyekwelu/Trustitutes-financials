@@ -16,7 +16,7 @@ const Dashboard = () => {
     console.log("Account", account);
 
     return (
-        <div className="p-6 min-h-screen space-y-6">
+        <div className="md:p-6 p-2 min-h-screen space-y-6">
             <FirstSection
                 fullName={`${userData?.user?.firstName} ${userData?.user?.lastName}`}
             />

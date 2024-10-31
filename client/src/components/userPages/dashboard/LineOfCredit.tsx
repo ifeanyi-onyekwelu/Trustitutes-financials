@@ -17,25 +17,25 @@ const LineOfCredit = () => {
             <div className="rounded-lg flex md:flex-row flex-col md:space-x-4 space-x-0 items-center md:space-y-0 space-y-5">
                 <div className="w-full md:w-1/2 bg-gray-900 p-5  rounded-lg">
                     <div className="flex space-x-2 mb-2">
-                        <IoCheckmarkCircle className="p-3 rounded-full bg-blue-50 text-gray-400" />
+                        <IoCheckmarkCircle className="rounded-full bg-gray-50 h-5 w-5 px-1" />
                         <span className="text-gray-400 font-bold text-sm">
                             Business Support Lo...
                         </span>
                     </div>
                     <div className="flex space-x-1 items-center text-gray-400">
-                        <p className="font-bold text-xl">+5,000</p>
+                        <p className="font-bold text-xl">+ 0</p>
                         <p className="text-xl">USD</p>
                     </div>
                 </div>
                 <div className="w-full md:w-1/2 bg-gray-900 p-5  rounded-lg">
                     <div className="flex space-x-2 mb-2">
-                        <IoWallet className="p-3 rounded-full bg-blue-50 text-gray-400" />
+                        <IoWallet className="rounded-full bg-gray-50 h-5 w-5 px-1" />
                         <span className="text-gray-400 font-bold text-sm">
                             FICO Credit Score
                         </span>
                     </div>
                     <div className="flex space-x-1 items-center text-gray-400">
-                        <p className="font-bold text-xl">750</p>
+                        <p className="font-bold text-xl">0</p>
                     </div>
                 </div>
             </div>

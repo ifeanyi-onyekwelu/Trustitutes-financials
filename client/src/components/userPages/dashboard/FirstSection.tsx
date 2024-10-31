@@ -30,7 +30,7 @@ const FirstSection = ({ fullName }: FirstSectionProps) => {
                 <p>At a glance summary of your account!</p>
             </div>
 
-            <Stack direction="row" spacing={2}>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                 <Button
                     variant="contained"
                     endIcon={<MdOutlineArrowRightAlt />}

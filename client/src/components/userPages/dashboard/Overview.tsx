@@ -13,7 +13,7 @@ const Overview = ({ balance, lastLogin, fullName, ip }: Props) => {
     return (
         <div className="w-full md:w-1/2">
             <h3 className="text-xl text-white font-semibold mb-5">Overview</h3>
-            <div className="flex md:flex-row flex-col md:items-center items-start px-8 md:py-12 py-6 rounded-lg bg-blue-950 md:space-x-10 space-x-0 md:space-y-0 space-y-6">
+            <div className="flex flex-row md:items-center items-start px-8 md:py-12 py-6 rounded-lg bg-blue-950 md:space-x-10 space-x-10">
                 <div className="flex flex-col space-y-5 w-1/2">
                     <Avatar
                         alt="Avatar"
@@ -24,20 +24,20 @@ const Overview = ({ balance, lastLogin, fullName, ip }: Props) => {
                         <p className="font-semibold text-blue-500">
                             Last Login
                         </p>
-                        <span className="text-gray-500">
+                        <span className="text-gray-500 md:text-lg text-xs font-bold">
                             29 Oct 24, 15:53 pm
                         </span>
                     </div>
                 </div>
                 <div className="flex flex-col space-y-5">
                     <div className="flex flex-col">
-                        <p className="text-blue-500 font-semibold">
+                        <p className="text-blue-500 font-semibold text-sm">
                             Available balance
                         </p>
-                        <h3 className="text-white font-bold text-2xl">
+                        <h3 className="text-white font-bold text-lg">
                             USD {balance && formatAmount(balance)}
                         </h3>
-                        <p className="text-lg text-gray-400">
+                        <p className="text-md text-gray-400">
                             {fullName ? fullName : "Unknown User"}
                         </p>
                     </div>

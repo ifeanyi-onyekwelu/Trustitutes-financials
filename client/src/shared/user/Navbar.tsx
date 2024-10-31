@@ -8,16 +8,47 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Settings from "@mui/icons-material/Settings";
-import History from "@mui/icons-material/History";
+import { Button } from "@mui/material";
 import Verified from "@mui/icons-material/Verified";
 import Logout from "@mui/icons-material/Logout";
 import { useUser } from "../../context/UserContext";
 
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../../features/auth/authApiSlice";
+import { IoMenu } from "react-icons/io5";
 
-const Navbar = ({ toggleSidebar }: any) => {
+function stringToColor(string: string) {
+    let hash = 0;
+    let i;
+
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+        hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+
+    for (i = 0; i < 3; i += 1) {
+        const value = (hash >> (i * 8)) & 0xff;
+        color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
+}
+
+function stringAvatar(name: string) {
+    return {
+        sx: {
+            bgcolor: stringToColor(name),
+        },
+        children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    };
+}
+
+const Navbar = ({ toggleDrawer }: any) => {
     const navigate = useNavigate();
+    const userData: any = useUser();
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -45,13 +76,10 @@ const Navbar = ({ toggleSidebar }: any) => {
     return (
         <nav className="bg-deepNavyBlue text-white py-1 px-4 shadow-md border-b border-gray-700">
             <div className="container mx-auto flex justify-between items-center">
-                <div className="flex items-center">
-                    <button
-                        onClick={toggleSidebar}
-                        className="mr-4 block md:hidden"
-                    >
-                        {/* <Bars3Icon className="text-white w-5 h-5" /> */}
-                    </button>
+                <div className="flex items-center md:hidden">
+                    <Button onClick={toggleDrawer(true)}>
+                        <IoMenu className="text-2xl text-white border border-gray-600 p-1 rounded" />
+                    </Button>
                 </div>
 
                 <Box
@@ -71,13 +99,18 @@ const Navbar = ({ toggleSidebar }: any) => {
                             aria-haspopup="true"
                             aria-expanded={open ? "true" : undefined}
                         >
-                            <Avatar sx={{ width: 35, height: 35 }}>M</Avatar>
+                            <Avatar
+                                {...stringAvatar(
+                                    `${userData.user.firstName} ${userData.user.lastName}`
+                                )}
+                            />
                             <div className="flex flex-col text-sm items-start">
                                 <span className="text-green-600">
                                     Connected
                                 </span>
                                 <span className="text-white">
-                                    Ifeanyi Onyekwelu
+                                    {userData.user.firstName}{" "}
+                                    {userData.user.lastName}
                                 </span>
                             </div>
                         </IconButton>

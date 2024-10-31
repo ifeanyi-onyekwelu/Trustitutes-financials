@@ -20,8 +20,8 @@ const CurrentAccount = ({ balance, accountNumber }: Props) => {
             </div>
 
             <div className="bg-gray-900 p-5 space-y-2 rounded-lg">
-                <div className="flex space-x-5">
-                    <IoWallet className="p-3 rounded-full bg-blue-50 text-gray-400" />
+                <div className="flex items-center gap-2">
+                    <IoWallet className="rounded-full bg-gray-50 h-5 w-5 px-1" />
                     <span className="text-gray-400 font-bold">
                         {accountNumber}
                     </span>
