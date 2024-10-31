@@ -4,8 +4,6 @@ import { config } from "dotenv";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import morgan from "morgan";
-import path from "path";
 import mongoose from "mongoose";
 
 import dbConn from "@/config/dbConn";
@@ -28,16 +26,14 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname, "public")));
-
 app.use("^/$", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "api_documentation.html"));
+    res.json({ message: "API Running" });
 });
 
 app.use("/api/v1", apiRoutes);
 
 app.all("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "404.html"));
+    res.json({ message: "Resource not found!" });
 });
 
 mongoose.connection.once("open", () => {
