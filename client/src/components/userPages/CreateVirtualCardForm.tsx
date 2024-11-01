@@ -4,20 +4,41 @@ import { Button } from "@mui/material";
 import { useUser } from "../../context/UserContext";
 import { IoInformation } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import Alert from "../common/Alert";
 
-const CreateVirtualCardForm = ({ handleSubmit, handleOnChange }: any) => {
+const CreateVirtualCardForm = () => {
     const userData: any = useUser();
     const [formData, setFormData] = useState({
-        holderName: userData?.fullName || "",
-        phoneNumber: userData?.phoneNumber || "",
-        email: userData?.email || "",
-        address: userData?.address || "",
+        holderName:
+            `${userData?.user?.firstName} ${userData?.user?.lastName}` || "",
+        phoneNumber: userData?.user?.phoneNumber || "",
+        email: userData?.user?.email || "",
+        address: userData?.user?.address || "",
         cardType: "",
     });
+
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const [successMessage, setSuccessMessage] = useState<string>("");
+    const [statusType, setStatusType] = useState<"error" | "success">("error");
+    const [showAlert, setShowAlert] = useState<boolean>(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            // const response = await updateProfile({ ...formData });
+            setSuccessMessage("Virtual Card Created");
+            setStatusType("success");
+            setShowAlert(true);
+        } catch (error: any) {
+            setErrorMessage(error.data.message || "Card Creation Failed");
+            setStatusType("error");
+            setShowAlert(true);
+        }
     };
 
     return (
@@ -120,6 +141,16 @@ const CreateVirtualCardForm = ({ handleSubmit, handleOnChange }: any) => {
                     Submit
                 </Button>
             </form>
+
+            {showAlert && (
+                <Alert
+                    successMessage={successMessage}
+                    errorMessage={errorMessage}
+                    statusType={statusType}
+                    showAlert={showAlert}
+                    setShowAlert={setShowAlert}
+                />
+            )}
         </>
     );
 };

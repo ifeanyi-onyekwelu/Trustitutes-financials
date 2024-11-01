@@ -1,68 +1,103 @@
 import React, { useState, useEffect } from "react";
-import { useGetRecpientAccountQuery } from "./userApiSlice";
+import {
+    useGetRecpientAccountQuery,
+    useTransferMutation,
+} from "./userApiSlice";
 import TransferForm from "../../components/userPages/TransferForm";
-import TransferFailed from "../../components/common/Dialog/TransferFailed";
+import Alert from "../../components/common/Alert";
 
 const TransferFunds = () => {
-    const [amount, setAmount] = useState("");
-    const [toAccountNumber, setToAccountNumber] = useState("");
-    const [recipientName, setRecipientName] = useState("");
-    const [error, setError] = useState("");
-    const [showModal, setShowModal] = useState(false);
+    const [formData, setFormData] = useState({
+        toAccountNumber: "",
+        recipientName: "",
+        amount: "",
+        transferType: "account", // Default to "account" for regular transfer
+        wireDetails: {
+            bankName: "",
+            swiftCode: "",
+            routingNumber: "",
+            recipientAddress: "",
+        },
+    });
+
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const [successMessage, setSuccessMessage] = useState<string>("");
+    const [statusType, setStatusType] = useState<"error" | "success">("error");
+    const [showAlert, setShowAlert] = useState<boolean>(false);
 
     const {
         data: recipientData,
         error: recipientError,
         isLoading: isFetchingRecipient,
-    } = useGetRecpientAccountQuery(toAccountNumber, { skip: !toAccountNumber });
+    } = useGetRecpientAccountQuery(formData.toAccountNumber, {
+        skip: !formData.toAccountNumber,
+    });
 
-    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-        setAmount(e.target.value);
-    const handleToAccountNumberChange = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        setToAccountNumber(e.target.value);
-        setRecipientName("");
+    const [transfer, { isLoading: transferLoading }] = useTransferMutation();
+
+    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+
+        if (name in formData.wireDetails) {
+            // Update wire details if the field is within wireDetails
+            setFormData((prevState) => ({
+                ...prevState,
+                wireDetails: {
+                    ...prevState.wireDetails,
+                    [name]: value,
+                },
+            }));
+        } else {
+            setFormData((prevState) => ({
+                ...prevState,
+                [name]: value,
+            }));
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!amount || !toAccountNumber) {
-            setError("Please fill in all fields.");
-            return;
-        }
         try {
-            setShowModal(true);
+            const response = await transfer(formData).unwrap();
+            setSuccessMessage("Transfer Successful");
+            setStatusType("success");
+            setShowAlert(true);
         } catch (error: any) {
-            setError(error.data.message);
+            setErrorMessage(error.data.message || "Transfer Failed");
+            setStatusType("error");
+            setShowAlert(true);
         }
     };
 
     useEffect(() => {
         if (recipientData?.success) {
-            setRecipientName(
-                `${recipientData.user.firstName} ${recipientData.user.lastName}`
-            );
-        } else if (recipientError || !toAccountNumber) {
-            setRecipientName("");
+            setFormData((prevState) => ({
+                ...prevState,
+                recipientName: `${recipientData.user.firstName} ${recipientData.user.lastName}`,
+            }));
+        } else if (recipientError || !formData.toAccountNumber) {
+            setFormData((prevState) => ({
+                ...prevState,
+                recipientName: "",
+            }));
         }
-    }, [recipientData, recipientError, toAccountNumber]);
+    }, [recipientData, recipientError, formData.toAccountNumber]);
 
     return (
-        <div className="container mx-auto p-6 w-full rounded-lg">
+        <div className="container mx-auto p-1 w-full">
             <h1 className="text-3xl font-bold text-center mb-6 text-blue-500">
                 Send Fund
             </h1>
-            {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
 
             <TransferForm
                 handleSubmit={handleSubmit}
-                toAccountNumber={toAccountNumber}
-                handleToAccountNumberChange={handleToAccountNumberChange}
+                handleOnChange={handleOnChange}
+                toAccountNumber={formData.toAccountNumber}
                 isFetchingRecipient={isFetchingRecipient}
-                recipientName={recipientName}
-                handleAmountChange={handleAmountChange}
-                amount={amount}
+                recipientName={formData.recipientName}
+                amount={formData.amount}
+                transferType={formData.transferType}
+                wireDetails={formData.wireDetails}
             />
 
             <div className="mt-4 text-gray-500 text-sm text-center">
@@ -71,10 +106,15 @@ const TransferFunds = () => {
                 <p>Incorrect submissions may result in the loss of funds.</p>
             </div>
 
-            <TransferFailed
-                open={showModal}
-                onClose={() => setShowModal(false)}
-            />
+            {showAlert && (
+                <Alert
+                    successMessage={successMessage}
+                    errorMessage={errorMessage}
+                    statusType={statusType}
+                    showAlert={showAlert}
+                    setShowAlert={setShowAlert}
+                />
+            )}
         </div>
     );
 };

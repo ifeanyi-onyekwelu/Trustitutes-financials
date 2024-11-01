@@ -1,7 +1,6 @@
-import { IoBook, IoHome, IoWalletSharp } from "react-icons/io5";
+import { IoHome, IoWalletSharp } from "react-icons/io5";
 import { RiSecurePaymentFill } from "react-icons/ri";
 import { AiFillCreditCard } from "react-icons/ai";
-import { RiExchangeDollarLine } from "react-icons/ri";
 import { VscHistory } from "react-icons/vsc";
 import { Link, useLocation } from "react-router-dom";
 import { useFetchUserAccountQuery } from "../../features/user/userApiSlice";

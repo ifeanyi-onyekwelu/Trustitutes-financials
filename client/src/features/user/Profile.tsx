@@ -1,11 +1,6 @@
 import ProfileForm from "../../components/userPages/ProfileForm";
 
 const Profile = () => {
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
-        // Submit logic here
-    };
-
     return (
         <div className="container mx-auto p-6 w-full rounded-lg">
             <h1 className="md:text-4xl text-2xl text-center text-gray-100 font-bold">

@@ -12,6 +12,7 @@ import { Button } from "@mui/material";
 import Verified from "@mui/icons-material/Verified";
 import Logout from "@mui/icons-material/Logout";
 import { useUser } from "../../context/UserContext";
+import { IoFileTray } from "react-icons/io5";
 
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../../features/auth/authApiSlice";
@@ -78,8 +79,18 @@ const Navbar = ({ toggleDrawer }: any) => {
             <div className="container mx-auto flex justify-between items-center">
                 <div className="flex items-center md:hidden">
                     <Button onClick={toggleDrawer(true)}>
-                        <IoMenu className="text-2xl text-white border border-gray-600 p-1 rounded" />
+                        <IoMenu className="text-4xl text-white border border-gray-600 p-1 rounded" />
                     </Button>
+                </div>
+
+                <div className="hidden md:flex items-center space-x-1 ml-10">
+                    <IoFileTray />
+                    <span className="font-medium text-sm">
+                        Do you the latest update of Covid 2024?{" "}
+                        <span className="text-gray-400">
+                            An overview of ours is now available ...
+                        </span>
+                    </span>
                 </div>
 
                 <Box
