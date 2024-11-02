@@ -118,7 +118,9 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
         newPage: number
     ) => setPage(newPage);
     const handleChangeRowsPerPage = (
-        event: React.ChangeEvent<HTMLInputElement>
+        event: React.ChangeEvent<
+            HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+        >
     ) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);

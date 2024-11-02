@@ -77,7 +77,11 @@ const Profile = () => {
     const [changePassword, { isLoading: changePasswordLoading }] =
         useChangePasswordMutation();
 
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChange = (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+        >
+    ) => {
         const { name, value } = e.target;
         setFormData((prevState) => ({
             ...prevState,

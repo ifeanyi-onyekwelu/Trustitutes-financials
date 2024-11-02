@@ -22,7 +22,11 @@ const CreateVirtualCardForm = () => {
     const [statusType, setStatusType] = useState<"error" | "success">("error");
     const [showAlert, setShowAlert] = useState<boolean>(false);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+        >
+    ) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };

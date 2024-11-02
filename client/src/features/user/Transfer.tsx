@@ -35,7 +35,11 @@ const TransferFunds = () => {
 
     const [transfer, { isLoading: transferLoading }] = useTransferMutation();
 
-    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleOnChange = (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+        >
+    ) => {
         const { name, value } = e.target;
 
         if (name in formData.wireDetails) {

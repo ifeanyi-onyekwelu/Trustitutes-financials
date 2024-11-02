@@ -5,7 +5,11 @@ interface Props {
     name: string;
     label: string;
     type?: string;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange: (
+        event: React.ChangeEvent<
+            HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+        >
+    ) => void;
 }
 
 const FormGroup = ({ value, name, label, onChange, type = "text" }: Props) => {
