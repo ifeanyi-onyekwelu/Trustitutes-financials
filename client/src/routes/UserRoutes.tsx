@@ -8,6 +8,8 @@ import ConfirmTransfer from "../features/user/ConfirmDeposit";
 import TransferFunds from "../features/user/Transfer";
 import Withdraw from "../features/user/Withdraw";
 import CreateVirtualCard from "../features/user/CreateVirtualCard";
+import Support from "../features/user/Support";
+import SettingsPage from "../features/user/SettingsPage";
 
 function UserRoutes() {
     return (
@@ -20,6 +22,8 @@ function UserRoutes() {
                 <Route path="transfer" element={<TransferFunds />} />
                 <Route path="transactions" element={<Transactions />} />
                 <Route path="withdraw" element={<Withdraw />} />
+                <Route path="support" element={<Support />} />
+                <Route path="settings" element={<SettingsPage />} />
                 <Route
                     path="card/virtual/add"
                     element={<CreateVirtualCard />}

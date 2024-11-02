@@ -9,7 +9,6 @@ interface ITransaction {
     type: "deposit" | "withdrawal" | "bill-payment" | "transfer";
     description: string;
     reference: string;
-    receipt?: string;
     date: Date;
 }
 
@@ -49,9 +48,6 @@ const transactionSchema = new Schema<ITransaction>(
         reference: {
             type: String,
             required: true,
-        },
-        receipt: {
-            type: String, // Assuming receipt is stored as a URL or path
         },
         description: {
             type: String,

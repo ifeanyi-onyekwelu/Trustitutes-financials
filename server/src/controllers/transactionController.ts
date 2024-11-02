@@ -22,24 +22,23 @@ class TransactionController {
     async fundAccount(req: Request, res: Response): Promise<void> {
         try {
             const { amount } = req.body;
-            const receipt = req.file;
 
-            if (!receipt) {
-                throw new CustomError("Receipt file is required", 400);
-            }
-
-            // Upload the receipt using the existing uploadImage function
-            const receiptUrl = await uploadImage(receipt.path);
-
-            // Create a new transaction record with the receipt URL
-            const newTransaction = await Transaction.create({
+            await Transaction.create({
                 userId: req.user._id,
                 amount,
                 type: "deposit",
                 reference: generateRandomReference(),
-                status: "pending",
-                receiptUrl,
+                status: "succeded",
             });
+
+            const userAccount = await Account.findOne({
+                user: req.user._id,
+            });
+
+            await Account.findOneAndUpdate(
+                { _id: userAccount?._id },
+                { $inc: { balance: amount } }
+            );
 
             return logger.respond(res, "Deposit notification received!", 200);
         } catch (err: any) {
@@ -118,7 +117,7 @@ class TransactionController {
                 fromAccount: fromAccount.accountNumber,
                 toAccount: toAccountNumber,
                 amount,
-                status: "success",
+                status: "succeded",
                 type: "transfer",
                 description: `Transfer of ${amount} to ${toAccount.accountNumber}`,
                 reference: generateRandomReference(),

@@ -1,5 +1,9 @@
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
+
 const Support = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="px-12 py-10 rounded-sm border border-gray-700 bg-gray-900">
             <div className="flex md:flex-row flex-col md:items-center items-start justify-between md:space-y-0 space-y-3">
@@ -14,7 +18,11 @@ const Support = () => {
                     </p>
                 </div>
 
-                <Button variant="outlined" sx={{ textTransform: "capitalize" }}>
+                <Button
+                    variant="outlined"
+                    sx={{ textTransform: "capitalize" }}
+                    onClick={() => navigate("support")}
+                >
                     Get Support Now
                 </Button>
             </div>

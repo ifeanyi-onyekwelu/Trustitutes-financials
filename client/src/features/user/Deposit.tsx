@@ -1,13 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import DepositForm from "../../components/userPages/deposit/DepositForm";
 
 const FundAccount = () => {
-    const navigate = useNavigate();
-
-    const onClick = () => {
-        navigate("/dashboard/user/me/confirm-deposit");
-    };
-
     return (
         <div className="container mx-auto p-6 border border-gray-200 rounded-lg">
             <header className="text-center mb-8">
@@ -24,7 +17,7 @@ const FundAccount = () => {
             <div className="flex flex-col md:flex-row gap-8">
                 {/* Deposit Form */}
                 <div className="flex-1">
-                    <DepositForm onClick={onClick} />
+                    <DepositForm />
                 </div>
 
                 {/* Side Panel with Important Tips and Reminder */}

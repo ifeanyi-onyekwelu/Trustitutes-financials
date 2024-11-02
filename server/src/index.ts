@@ -3,6 +3,7 @@ import express from "express";
 import { config } from "dotenv";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
 
@@ -22,6 +23,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(morgan("dev"));
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(bodyParser.json());

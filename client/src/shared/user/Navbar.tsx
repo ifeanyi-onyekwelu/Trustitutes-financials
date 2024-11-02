@@ -66,13 +66,8 @@ const Navbar = ({ toggleDrawer }: any) => {
 
     const handleLogout = async () => {
         await logout({});
+        navigate("/secure/sign-in");
     };
-
-    useEffect(() => {
-        if (isSuccess) {
-            navigate("/secure/sign-in");
-        }
-    }, [isSuccess, navigate]);
 
     return (
         <nav className="bg-deepNavyBlue text-white py-1 px-4 shadow-md border-b border-gray-700">
@@ -168,17 +163,11 @@ const Navbar = ({ toggleDrawer }: any) => {
                         <Avatar /> Profile
                     </MenuItem>
                     <Divider />
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={() => navigate("settings")}>
                         <ListItemIcon>
                             <Settings fontSize="small" />
                         </ListItemIcon>
                         Settings
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                            <Verified fontSize="small" />
-                        </ListItemIcon>
-                        KYC
                     </MenuItem>
                     <MenuItem onClick={handleLogout}>
                         <ListItemIcon>

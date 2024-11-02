@@ -10,6 +10,7 @@ const ProfileDetailsForm = () => {
     const [formData, setFormData] = useState({
         firstName: userData?.user?.firstName || "",
         lastName: userData?.user?.lastName || "",
+        middleName: userData?.user?.middleName || "",
         email: userData?.user?.email || "",
         phoneNumber: userData?.user?.phoneNumber || "",
         address: userData?.user?.address || "",
@@ -43,7 +44,11 @@ const ProfileDetailsForm = () => {
         }
     };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+        >
+    ) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
@@ -60,6 +65,15 @@ const ProfileDetailsForm = () => {
                             name="firstName"
                             type="text"
                             placeholder="First Name"
+                            required
+                        />
+                        <InputField
+                            label="Middle Name"
+                            value={formData.middleName}
+                            onChange={handleInputChange}
+                            name="middleName"
+                            type="text"
+                            placeholder="Middle Name"
                             required
                         />
                         <InputField

@@ -31,7 +31,11 @@ class AuthController {
 
             const accessToken = jwt.sign(
                 {
-                    user,
+                    user: {
+                        _id: user._id,
+                        email: user.email,
+                        roles: user.roles,
+                    },
                 },
                 process.env.ACCESS_TOKEN_SECRET!,
                 {

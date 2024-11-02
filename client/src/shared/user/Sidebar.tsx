@@ -10,7 +10,11 @@ const Sidebar = () => {
     const location = useLocation();
     const { pathname } = location;
 
-    const { data: accountData } = useFetchUserAccountQuery("userAccount");
+    const { data: accountData, isLoading } =
+        useFetchUserAccountQuery("userAccount");
+
+    if (isLoading) return <p>Loading...</p>;
+
     const account = accountData?.account || {};
     console.log(account);
 

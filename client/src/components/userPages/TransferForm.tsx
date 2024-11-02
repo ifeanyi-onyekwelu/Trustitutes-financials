@@ -117,11 +117,7 @@ const TransferForm = ({
                 required
             />
 
-            <Button
-                variant="contained"
-                type="submit"
-                disabled={!toAccountNumber || !amount}
-            >
+            <Button variant="contained" type="submit" color="primary">
                 {isFetchingRecipient ? "Processing..." : "Submit"}
             </Button>
         </form>

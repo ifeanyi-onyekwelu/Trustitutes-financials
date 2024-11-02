@@ -1,7 +1,6 @@
 import FirstSection from "../../components/userPages/dashboard/FirstSection";
 import { useFetchUserAccountQuery } from "./userApiSlice";
 import "../../assets/css/Dashboard.css";
-import { useState, useEffect } from "react";
 import Overview from "../../components/userPages/dashboard/Overview";
 import CurrentAccount from "../../components/userPages/dashboard/CurrentAccount";
 import LineOfCredit from "../../components/userPages/dashboard/LineOfCredit";
@@ -10,7 +9,10 @@ import { useUser } from "../../context/UserContext";
 
 const Dashboard = () => {
     const userData: any = useUser();
-    const { data: accountData } = useFetchUserAccountQuery("userAccount");
+    const { data: accountData, isLoading } =
+        useFetchUserAccountQuery("userAccount");
+
+    if (isLoading) return <p>Loading...</p>;
 
     const account = accountData?.account || {};
     console.log("Account", account);

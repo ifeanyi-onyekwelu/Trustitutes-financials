@@ -1,18 +1,19 @@
-const allowedOrigins = ["https://www.trustitutesfinancials.com"];
+const allowedOrigins: string[] = [
+    "https://algotrades.io",
+    "https://www.algotrades.io",
+];
 
 const corsOptions = {
-    origin: (
-        origin: string | undefined,
-        cb: (err: Error | null, allow?: boolean) => void
-    ) => {
-        if (allowedOrigins.indexOf(origin || "") !== -1 || !origin) {
-            cb(null, true);
+    origin: (origin: any, callback: any) => {
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
         } else {
-            cb(new Error("Not allowed by cors"));
+            callback(new Error("Not allowed by cors"));
         }
     },
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
-    optionSuccessStatus: 200,
+    optionsSuccessStatus: 200,
 };
 
 export default corsOptions;

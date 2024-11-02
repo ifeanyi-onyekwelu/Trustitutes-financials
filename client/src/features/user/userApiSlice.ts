@@ -99,6 +99,26 @@ export const userApiSlice = baseApi.injectEndpoints({
                 body: data,
             }),
         }),
+        createSupportTicket: builder.mutation({
+            query: (data) => ({
+                url: "support-ticket/create",
+                method: "POST",
+                body: data,
+            }),
+        }),
+        getAllSupportTicket: builder.query({
+            query: () => ({
+                url: "support-ticket/all",
+                method: "GET",
+            }),
+        }),
+
+        getASupportTicket: builder.query({
+            query: ({ ticketId }) => ({
+                url: `support-ticket/${ticketId}`,
+                method: "GET",
+            }),
+        }),
     }),
 });
 
@@ -118,4 +138,7 @@ export const {
     useUploadProfileImageMutation,
     useChangePasswordMutation,
     useFetchATransactionsQuery,
+    useCreateSupportTicketMutation,
+    useGetAllSupportTicketQuery,
+    useGetASupportTicketQuery,
 } = userApiSlice;

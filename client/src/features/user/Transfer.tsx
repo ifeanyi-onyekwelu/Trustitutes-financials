@@ -58,10 +58,14 @@ const TransferFunds = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await transfer(formData).unwrap();
+            await transfer(formData).unwrap();
             setSuccessMessage("Transfer Successful");
             setStatusType("success");
             setShowAlert(true);
+
+            setTimeout(() => {
+                location.href = "/user/dashboard/transfer";
+            }, 3000);
         } catch (error: any) {
             setErrorMessage(error.data.message || "Transfer Failed");
             setStatusType("error");
