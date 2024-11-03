@@ -14,9 +14,6 @@ const UsersTable = ({ users }: any) => {
                                 Email
                             </th>
                             <th className="px-4 py-2 text-left text-gray-600 font-semibold">
-                                Username
-                            </th>
-                            <th className="px-4 py-2 text-left text-gray-600 font-semibold">
                                 Status
                             </th>
                             <th className="px-4 py-2 text-left text-gray-600 font-semibold">
@@ -38,11 +35,8 @@ const UsersTable = ({ users }: any) => {
                                     {user.email}
                                 </td>
                                 <td className="px-4 py-2 text-gray-700">
-                                    {user.username}
-                                </td>
-                                <td className="px-4 py-2 text-gray-700">
                                     <span
-                                        className={`inline-block px-2 py-1 text-sm font-semibold rounded-full ${
+                                        className={`inline-block p-2 text-sm font-semibold rounded-md ${
                                             user.isActive
                                                 ? "bg-green-100 text-green-800"
                                                 : "bg-red-100 text-red-800"
@@ -53,7 +47,7 @@ const UsersTable = ({ users }: any) => {
                                 </td>
                                 <td className="px-4 py-2 text-gray-700">
                                     <span
-                                        className={`inline-block px-2 py-1 text-sm font-semibold rounded-full ${
+                                        className={`inline-block p-2 text-sm font-semibold rounded-md ${
                                             user.isVerified
                                                 ? "bg-blue-100 text-blue-800"
                                                 : "bg-yellow-100 text-yellow-800"

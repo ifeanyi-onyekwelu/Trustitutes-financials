@@ -13,6 +13,7 @@ interface IUser {
     state: string;
     city: string;
     phoneNumber: string;
+    dateOfBirth: Date;
     ssn: string;
     zipcode: string;
     country: string;
@@ -59,13 +60,14 @@ const userSchema = new Schema<IUser>(
         state: String,
         zipcode: String,
         country: String,
+        dateOfBirth: Date,
         isVerified: {
             type: Boolean,
             default: false,
         },
         isActive: {
             type: Boolean,
-            default: true,
+            default: false,
         },
         isDeleted: {
             type: Boolean,

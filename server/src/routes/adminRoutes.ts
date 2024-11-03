@@ -19,6 +19,20 @@ router.get(
 
 router.get("/users/:userId", protect, adminOnly, adminController.getUser);
 
+router.get("/accounts", protect, adminOnly, adminController.getAllAccounts);
+router.get(
+    "/total-balance",
+    protect,
+    adminOnly,
+    adminController.getTotalBalance
+);
+router.get(
+    "/accounts/:accountId",
+    protect,
+    adminOnly,
+    adminController.getAccount
+);
+
 router.put(
     "/users/suspend-user/:userId",
     protect,
@@ -37,24 +51,13 @@ router.put(
     adminOnly,
     adminController.deleteUser
 );
-router
-    .get(
-        "/transactions/:transactionId",
-        protect,
-        adminOnly,
-        adminController.getTransaction
-    )
-    .put(
-        "/transactions/confirm-deposit/:transactionId",
-        protect,
-        adminOnly,
-        adminController.confirmDeposit
-    )
-    .put(
-        "/transactions/confirm-withdrawal/:transactionId",
-        protect,
-        adminOnly,
-        adminController.confirmWithdrawal
-    );
+router.get(
+    "/transactions/:transactionId",
+    protect,
+    adminOnly,
+    adminController.getTransaction
+);
+router.get("/support-tickets", adminController.getAllTickets);
+router.post("/support-tickets/:ticketId/reply", adminController.replyToTicket);
 
 export default router;

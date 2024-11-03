@@ -4,6 +4,9 @@ interface ISupportTicket {
     user: Schema.Types.ObjectId;
     department: string;
     complaint: string;
+    status: string;
+    response?: string;
+    resolvedAt?: Date;
 }
 
 const supportTicketSchema = new Schema<ISupportTicket>(
@@ -20,6 +23,19 @@ const supportTicketSchema = new Schema<ISupportTicket>(
         complaint: {
             type: String,
             required: true,
+        },
+        status: {
+            type: String,
+            enum: ["open", "in-progress", "resolved"],
+            default: "open",
+        },
+        response: {
+            type: String,
+            default: null,
+        },
+        resolvedAt: {
+            type: Date,
+            default: null,
         },
     },
     { timestamps: true }

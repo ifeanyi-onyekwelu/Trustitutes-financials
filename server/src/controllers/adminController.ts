@@ -6,8 +6,69 @@ import CustomError from "@/errors/CustomError";
 import logger from "@/utils/logger";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import SupportTicket from "@/models/SupportTicket";
 
 class AdminController {
+    async getAllAccounts(req: Request, res: Response): Promise<void> {
+        try {
+            const accounts = await Account.find().populate(
+                "user",
+                "firstName lastName email"
+            );
+            return logger.respondWithData(res, { accounts });
+        } catch (err: any) {
+            return logger.respondWithError(
+                res,
+                new CustomError(err.message, 500)
+            );
+        }
+    }
+    async getAccount(req: Request, res: Response): Promise<void> {
+        try {
+            const { accountId } = req.params;
+            const account = await Account.findOne({ _id: accountId }).populate(
+                "user",
+                "firstName lastName email"
+            );
+
+            if (!account)
+                return logger.respondWithError(
+                    res,
+                    new CustomError("Account not found", 404)
+                );
+
+            return logger.respondWithData(res, { account });
+        } catch (err: any) {
+            return logger.respondWithError(
+                res,
+                new CustomError(err.message, 500)
+            );
+        }
+    }
+    async getTotalBalance(req: Request, res: Response): Promise<void> {
+        try {
+            // Use MongoDB aggregation to sum the balance field for all accounts
+            const totalBalanceResult = await Account.aggregate([
+                {
+                    $group: {
+                        _id: null, // Group all documents together
+                        totalBalance: { $sum: "$balance" }, // Sum the balance field
+                    },
+                },
+            ]);
+
+            // Extract the total balance, or default to 0 if no results are found
+            const totalBalance = totalBalanceResult[0]?.totalBalance || 0;
+
+            return logger.respondWithData(res, { totalBalance });
+        } catch (err: any) {
+            return logger.respondWithError(
+                res,
+                new CustomError(err.message, 500)
+            );
+        }
+    }
+
     async getAllUsers(req: Request, res: Response): Promise<void> {
         try {
             const users = await User.find().select([
@@ -102,6 +163,8 @@ class AdminController {
                 "-password"
             );
 
+            const account = await Account.findOne({ user: user?._id });
+
             if (!user)
                 return logger.respondWithError(
                     res,
@@ -114,6 +177,8 @@ class AdminController {
                 isActive: false,
                 isDeleted: true,
             });
+
+            await Account.findByIdAndDelete(account?._id);
 
             return logger.respondWithData(res, {
                 message: `User ${user?.firstName} ${user?.lastName} deleted`,
@@ -130,8 +195,8 @@ class AdminController {
         try {
             const transactions = await Transaction.find().populate(
                 "userId",
-                "firstName username lastName"
-            ); // Specify the fields to return from the User model
+                "firstName lastName email"
+            );
             return logger.respondWithData(res, { transactions });
         } catch (err: any) {
             return logger.respondWithError(
@@ -161,40 +226,41 @@ class AdminController {
             );
         }
     }
-    async confirmDeposit(req: Request, res: Response): Promise<void> {
+    async getAllTickets(req: Request, res: Response): Promise<void> {
         try {
-            const { transactionId } = req.params;
-            const transaction = await Transaction.findOne({
-                _id: transactionId,
-            });
+            const tickets = await SupportTicket.find().populate(
+                "user",
+                "firstName lastName email"
+            );
+            return logger.respondWithData(res, { tickets });
+        } catch (err: any) {
+            return logger.respondWithError(
+                res,
+                new CustomError(err.message, 500)
+            );
+        }
+    }
+    async replyToTicket(req: Request, res: Response): Promise<void> {
+        try {
+            const { ticketId } = req.params;
+            const { response } = req.body;
 
-            if (!transaction) {
+            const ticket = await SupportTicket.findById(ticketId);
+            if (!ticket) {
                 return logger.respondWithError(
                     res,
-                    new CustomError("Transaction not found", 404)
+                    new CustomError("Ticket not found", 404)
                 );
             }
 
-            const account = await Account.findOne({ user: transaction.userId });
-
-            if (!account) {
-                return logger.respondWithError(
-                    res,
-                    new CustomError("Account not found", 404)
-                );
-            }
-
-            // Update the account balance
-            account.balance += transaction.amount;
-            await account.save();
-
-            // Update the transaction status
-            transaction.status = "succeded";
-            await transaction.save();
+            ticket.response = response;
+            ticket.status = "resolved";
+            ticket.resolvedAt = new Date();
+            await ticket.save();
 
             return logger.respondWithData(res, {
-                message: `Deposit of ${transaction.amount} confirmed`,
-                transaction,
+                message: "Response recorded successfully",
+                ticket,
             });
         } catch (err: any) {
             return logger.respondWithError(
@@ -203,55 +269,6 @@ class AdminController {
             );
         }
     }
-
-    async confirmWithdrawal(req: Request, res: Response): Promise<void> {
-        try {
-            const { transactionId } = req.params;
-            const transaction = await Transaction.findOne({
-                _id: transactionId,
-            });
-
-            if (!transaction) {
-                return logger.respondWithError(
-                    res,
-                    new CustomError("Transaction not found", 404)
-                );
-            }
-
-            const account = await Account.findOne({ user: transaction.userId });
-
-            if (!account) {
-                return logger.respondWithError(
-                    res,
-                    new CustomError("Account not found", 404)
-                );
-            }
-
-            // Update the account balance
-            account.balance -= transaction.amount;
-            await account.save();
-
-            // Update the transaction status
-            transaction.status = "succeded";
-            await transaction.save();
-
-            return logger.respondWithData(res, {
-                message: `Withdrawal of ${transaction.amount} confirmed`,
-                transaction,
-            });
-        } catch (err: any) {
-            return logger.respondWithError(
-                res,
-                new CustomError(err.message, 500)
-            );
-        }
-    }
-
-    /**
-     * @route POST /admin/login
-     * @description Admin login
-     * @access Public
-     */
     async login(req: Request, res: Response): Promise<void> {
         try {
             const { password, email } = req.body;
@@ -322,12 +339,6 @@ class AdminController {
             );
         }
     }
-
-    /**
-     * @route POST /admin/register
-     * @description Register a new admin
-     * @access Public
-     */
     async register(req: Request, res: Response): Promise<void> {
         try {
             const data = req.body;

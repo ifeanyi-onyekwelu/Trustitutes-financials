@@ -47,11 +47,6 @@ const SideBarDrawer = ({ open, toggleDrawer }: any) => {
             label: "Support Tickets",
             icon: <BiSupport className="w-5 h-5" />,
         },
-        {
-            to: "/admin-settings",
-            label: "Admin Settings",
-            icon: <RiAdminFill className="w-5 h-5" />,
-        },
     ];
 
     const DrawerList = (

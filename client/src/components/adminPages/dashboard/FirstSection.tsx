@@ -1,6 +1,7 @@
 import { ImCoinDollar } from "react-icons/im";
 import { IoCloudDownload, IoPeople } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import formatAmount from "../../../config/formatAmount";
 
 type FirstSectionProps = {
     totalUsers: number;
@@ -13,66 +14,48 @@ const FirstSection = ({
     totalTransactions,
     totalDeposit,
 }: FirstSectionProps) => {
-    const content = (
-        <div className="first-section">
-            <div className="credit">
-                <div className="credit-title">
-                    <div className="icon">
-                        <IoPeople className="w-5 h-5" />
+    const statsData = [
+        {
+            icon: <IoPeople className="w-5 h-5" />,
+            title: "Total Users",
+            value: totalUsers,
+        },
+        {
+            icon: <ImCoinDollar className="w-5 h-5" />,
+            title: "Total Transactions",
+            value: totalTransactions,
+        },
+        {
+            icon: <IoCloudDownload className="w-5 h-5" />,
+            title: "Total Deposit",
+            value: totalDeposit,
+        },
+    ];
+
+    return (
+        <div className="first-section flex flex-wrap">
+            {statsData.map((stat, index) => (
+                <div
+                    className="credit flex-1 m-2 p-4 bg-gray-900 rounded-lg shadow-md"
+                    key={index}
+                >
+                    <div className="credit-title flex items-center mb-2">
+                        <div className="icon mr-2">{stat.icon}</div>
+                        <h3 className="status-name text-lg font-semibold text-gray-300">
+                            {stat.title}
+                        </h3>
                     </div>
-                    <h3 className="status-name">Total Users</h3>
-                </div>
-
-                <div className="credit-balance">
-                    <h2>{totalUsers} </h2>
-                </div>
-            </div>
-            <div className="credit">
-                <div className="credit-title">
-                    <div className="icon">
-                        <ImCoinDollar className="w-5 h-5" />
+                    <div className="credit-balance">
+                        {stat.value !== undefined && (
+                            <h2 className="text-2xl font-bold text-gray-800">
+                                {formatAmount(stat.value)}
+                            </h2>
+                        )}
                     </div>
-                    <h3 className="status-name">Total Transactions</h3>
                 </div>
-
-                <div className="credit-balance">
-                    <h2>${totalTransactions}</h2>
-                </div>
-            </div>
-            <div className="credit">
-                <div className="credit-title">
-                    <div className="icon ">
-                        <IoCloudDownload className="w-5 h-5" />
-                    </div>
-                    <h3 className="status-name">Total Deposit</h3>
-                </div>
-
-                <div className="credit-balance">
-                    <h2>${totalDeposit}</h2>
-                </div>
-            </div>
-            <div className="credit">
-                <div className="credit-title">
-                    <Link
-                        className="block w-full transition-colors text-blue-300 hover:text-blue-400 p-2 mt-2 rounded"
-                        to="confirm-deposit"
-                    >
-                        Pending Deposits
-                    </Link>
-                </div>
-
-                <div className="credit-balance">
-                    <Link
-                        className="block w-full text-green-300 hover:text-blue-300 transition-colors p-2 mt-2 rounded"
-                        to="confirm-withdraw"
-                    >
-                        Pending Withdrawals
-                    </Link>
-                </div>
-            </div>
+            ))}
         </div>
     );
-    return content;
 };
 
 export default FirstSection;

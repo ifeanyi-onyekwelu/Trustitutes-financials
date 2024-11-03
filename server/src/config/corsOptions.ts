@@ -1,7 +1,6 @@
 const allowedOrigins: string[] = [
     "https://www.trustitutesfinancials.com",
     "https://trustitutesfinancials.com",
-    "http://localhost:5173",
 ];
 
 const corsOptions = {

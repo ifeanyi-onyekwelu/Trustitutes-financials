@@ -4,20 +4,17 @@ import { AiOutlineUser } from "react-icons/ai";
 import { VscHistory } from "react-icons/vsc";
 import { BiSupport, BiMoney } from "react-icons/bi";
 import { Link, useLocation } from "react-router-dom";
-import { useFetchUserAccountQuery } from "../../features/user/userApiSlice";
+import { useFetchTotalBalanceQuery } from "../../features/admin/adminApiSlie";
 import formatAmount from "../../config/formatAmount";
 
 const Sidebar = () => {
     const location = useLocation();
     const { pathname } = location;
 
-    const { data: accountData, isLoading } =
-        useFetchUserAccountQuery("userAccount");
+    const { data: totalBalanceData, isLoading } =
+        useFetchTotalBalanceQuery("totalBalance");
 
     if (isLoading) return <p>Loading...</p>;
-
-    const account = accountData?.account || {};
-    console.log(account);
 
     const menuItems = [
         {
@@ -45,11 +42,6 @@ const Sidebar = () => {
             label: "Support Tickets",
             icon: <BiSupport className="w-5 h-5" />,
         },
-        {
-            to: "admin-settings",
-            label: "Admin Settings",
-            icon: <RiAdminFill className="w-5 h-5" />,
-        },
     ];
 
     return (
@@ -63,19 +55,19 @@ const Sidebar = () => {
 
             <div className="px-6 space-y-1 mb-10">
                 <h3 className="uppercase text-white font-black text-sm">
-                    Available balance
+                    Total Balance
                 </h3>
                 <div className="flex justify-between">
                     <h1 className="text-3xl text-blue-500">
                         <span className="font-extrabold">
-                            {formatAmount(account.balance)}
+                            {formatAmount(totalBalanceData.totalBalance)}
                         </span>{" "}
                         USD
                     </h1>
                 </div>
                 <p className="text-gray-300">
                     <span className="font-extrabold">
-                        {formatAmount(account.balance)}
+                        {formatAmount(totalBalanceData.totalBalance)}
                     </span>{" "}
                     USD
                 </p>

@@ -103,15 +103,12 @@ class AuthController {
 
             const user = new User({
                 ...data,
-                roles:
-                    data.roles && data.roles.includes("admin")
-                        ? ["user", "admin"]
-                        : ["user"],
+                roles: ["user"],
             });
 
             await user.save();
 
-            const account = await Account.create({
+            await Account.create({
                 user: user._id,
                 accountNumber: generateAccountNumber(),
                 balance: 0,

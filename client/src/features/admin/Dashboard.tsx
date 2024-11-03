@@ -3,18 +3,13 @@ import {
     useFetchAllTransactionsQuery,
     useActivateUserAccountMutation,
     useSuspendUserAccountMutation,
-    useDeleteUserAccountMutation,
 } from "./adminApiSlie";
 import { useState, useEffect } from "react";
-
-import "chart.js/auto";
-import { Link } from "react-router-dom";
 import FirstSection from "../../components/adminPages/dashboard/FirstSection";
 import "../../assets/css/Dashboard.css";
-import Charts from "../../components/adminPages/dashboard/Charts";
 import UserManagementTable from "../../components/adminPages/dashboard/UserManagementTable";
-import TransactionManagementTable from "../../components/adminPages/dashboard/TransactionManagementTable";
-import Modal from "../../components/adminPages/dashboard/Modal";
+import { Divider } from "@mui/material";
+import Alert from "../../components/common/Alert";
 
 const Dashboard = () => {
     const { data: usersData } = useFetchAllUsersQuery("allUsers");
@@ -23,16 +18,17 @@ const Dashboard = () => {
 
     const [activateUserAccount] = useActivateUserAccountMutation();
     const [suspendUserAccount] = useSuspendUserAccountMutation();
-    const [deleteUserAccount] = useDeleteUserAccountMutation();
 
     const [totalTransactions, setTotalTransactions] = useState<number>(0);
     const [totalDeposit, setTotalDeposit] = useState<number>(0);
 
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const [successMessage, setSuccessMessage] = useState<string>("");
+    const [statusType, setStatusType] = useState<"error" | "success">("error");
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+
     const users = usersData?.users || [];
     const transactions = transactionsData?.transactions || [];
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState<any>(null);
 
     useEffect(() => {
         let total = 0;
@@ -47,52 +43,20 @@ const Dashboard = () => {
         setTotalDeposit(deposits);
     }, [transactions]);
 
-    const openModal = (content: any) => {
-        setModalContent(content);
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setModalContent(null);
-    };
-
-    const userStatusData = {
-        labels: ["Active", "Inactive"],
-        datasets: [
-            {
-                label: "User Status",
-                data: [
-                    users.filter((user: any) => user.isActive).length,
-                    users.filter((user: any) => !user.isActive).length,
-                ],
-                backgroundColor: ["#4CAF50", "#FF9800"],
-            },
-        ],
-    };
-
-    const transactionTypeData = {
-        labels: ["Deposits", "Withdrawals"],
-        datasets: [
-            {
-                label: "Transaction Types",
-                data: [
-                    transactions.filter((t: any) => t.type === "deposit")
-                        .length,
-                    transactions.filter((t: any) => t.type === "withdrawal")
-                        .length,
-                ],
-                backgroundColor: ["#2196F3", "#F44336"],
-            },
-        ],
-    };
-
     const handleMutation = async (mutation: any, params: any) => {
         try {
             const result = await mutation(params).unwrap();
-            console.log(`RESPONSE: ${JSON.stringify(result)}`);
+            setSuccessMessage(result?.message);
+            setStatusType("success");
+            setShowAlert(true);
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
         } catch (err: any) {
             console.log(`Failed! ${err}`);
+            setErrorMessage(err.data.message || "Transfer Failed");
+            setStatusType("error");
+            setShowAlert(true);
         }
     };
 
@@ -104,38 +68,30 @@ const Dashboard = () => {
                 totalDeposit={totalDeposit}
             />
 
-            <Charts
-                userStatusData={userStatusData}
-                transactionTypeData={transactionTypeData}
-            />
+            <section className="bg-white p-4 shadow-lg rounded-lg mt-4 space-y-4">
+                <h2 className="text-3xl font-extrabold mb-4">
+                    Newly Registered Users
+                </h2>
 
-            <section className="bg-white p-4 shadow-lg rounded-lg mt-4">
-                <h2 className="text-xl font-semibold mb-4">User Management</h2>
+                <Divider />
 
                 <UserManagementTable
                     users={users}
                     suspendUserAccount={suspendUserAccount}
                     activateUserAccount={activateUserAccount}
-                    openModal={openModal}
-                    deleteUserAccount={deleteUserAccount}
                     handleMutation={handleMutation}
                 />
             </section>
 
-            {/* <section className="bg-white p-4 shadow-lg rounded-lg mt-4">
-                <h2 className="text-xl font-semibold mb-4">
-                    Transaction Management
-                </h2>
-                <div className="overflow-auto">
-                    <TransactionManagementTable transactions={transactions} />
-                </div>
-            </section> */}
-
-            <Modal
-                isModalOpen={isModalOpen}
-                closeModal={closeModal}
-                modalContent={modalContent}
-            />
+            {showAlert && (
+                <Alert
+                    successMessage={successMessage}
+                    errorMessage={errorMessage}
+                    statusType={statusType}
+                    showAlert={showAlert}
+                    setShowAlert={setShowAlert}
+                />
+            )}
         </div>
     );
 };
