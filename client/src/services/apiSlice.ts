@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // Base query setup
 const baseQuery = fetchBaseQuery({
-    // baseUrl: "http://localhost:4567/api/v1",
     baseUrl: "https://trustitutes-financials.onrender.com/api/v1",
     credentials: "include",
     prepareHeaders: (headers, _) => {

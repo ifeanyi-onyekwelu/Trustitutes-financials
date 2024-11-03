@@ -1,6 +1,6 @@
 const allowedOrigins: string[] = [
-    "https://algotrades.io",
-    "https://www.algotrades.io",
+    "https://www.trustitutesfinancials.com",
+    "https://trustitutesfinancials.com",
 ];
 
 const corsOptions = {
