@@ -9,7 +9,6 @@ const Transaction = () => {
         toDate: "",
         type: "",
         status: "",
-        search: "",
     });
 
     const { data: transactionsData } =
@@ -49,14 +48,6 @@ const Transaction = () => {
 
         // Filter by status
         if (filters.status && transaction.status !== filters.status) {
-            return false;
-        }
-
-        // Filter by search keyword
-        if (
-            filters.search &&
-            !transaction.description.toLowerCase().includes(filters.search)
-        ) {
             return false;
         }
 

@@ -1,10 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 
-interface IRole {
-    value: string;
-}
-
 interface IUser {
     firstName: string;
     middleName: string;
@@ -20,7 +16,7 @@ interface IUser {
     ssn: string;
     zipcode: string;
     country: string;
-    roles: IRole[];
+    roles: string[];
     isVerified: boolean;
     isDeleted: boolean;
     isActive: boolean;
@@ -30,15 +26,15 @@ const userSchema = new Schema<IUser>(
     {
         firstName: {
             type: String,
-            required: true,
+            required: false,
         },
         lastName: {
             type: String,
-            required: true,
+            required: false,
         },
         middleName: {
             type: String,
-            required: true,
+            required: false,
         },
         email: {
             type: String,
@@ -54,13 +50,8 @@ const userSchema = new Schema<IUser>(
                 type: String,
             },
         ],
-        refreshToken: {
-            type: String,
-            required: false,
-        },
-        profilePicture: {
-            type: String,
-        },
+        refreshToken: String,
+        profilePicture: String,
         address: String,
         city: String,
         phoneNumber: String,

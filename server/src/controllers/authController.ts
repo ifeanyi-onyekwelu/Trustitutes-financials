@@ -17,9 +17,32 @@ class AuthController {
      */
     async login(req: Request, res: Response): Promise<void> {
         try {
-            const { password } = req.body;
+            const { accountNumber, password } = req.body;
 
-            const user = req.user;
+            if (!accountNumber || !password) {
+                return logger.respondWithError(
+                    res,
+                    new ValidationError(
+                        "Account number and Password must be provided"
+                    )
+                );
+            }
+
+            const account = await Account.findOne({ accountNumber });
+            if (!account) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("Account not found!", 400)
+                );
+            }
+
+            const user = await User.findById(account?.user);
+            if (!user || !user?.isActive || user.isDeleted) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("Account not found!", 400)
+                );
+            }
 
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {

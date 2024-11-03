@@ -6,6 +6,9 @@ import adminOnly from "@/middlewares/adminOnly";
 const router = Router();
 const adminController = new AdminController();
 
+router.post("/register", adminController.register);
+router.post("/login", adminController.login);
+
 router.get("/users", protect, adminOnly, adminController.getAllUsers);
 router.get(
     "/transactions",
@@ -53,4 +56,5 @@ router
         adminOnly,
         adminController.confirmWithdrawal
     );
+
 export default router;

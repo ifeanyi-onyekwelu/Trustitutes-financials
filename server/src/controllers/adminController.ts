@@ -4,6 +4,8 @@ import Transaction from "@/models/Transaction";
 import Account from "@/models/Account";
 import CustomError from "@/errors/CustomError";
 import logger from "@/utils/logger";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 class AdminController {
     async getAllUsers(req: Request, res: Response): Promise<void> {
@@ -201,6 +203,7 @@ class AdminController {
             );
         }
     }
+
     async confirmWithdrawal(req: Request, res: Response): Promise<void> {
         try {
             const { transactionId } = req.params;
@@ -240,6 +243,128 @@ class AdminController {
             return logger.respondWithError(
                 res,
                 new CustomError(err.message, 500)
+            );
+        }
+    }
+
+    /**
+     * @route POST /admin/login
+     * @description Admin login
+     * @access Public
+     */
+    async login(req: Request, res: Response): Promise<void> {
+        try {
+            const { password, email } = req.body;
+            const user = await User.findOne({ email }).select([
+                "-refreshToken",
+            ]);
+
+            if (!user || !user?.isActive || user.isDeleted) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("Account not found!", 400)
+                );
+            }
+
+            console.log(user);
+
+            if (!user.roles.includes("admin")) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("Access Denied", 403)
+                );
+            }
+
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("Invalid credentials", 400)
+                );
+            }
+
+            const accessToken = jwt.sign(
+                {
+                    user: {
+                        _id: user._id,
+                        email: user.email,
+                        roles: user.roles,
+                    },
+                },
+                process.env.ACCESS_TOKEN_SECRET!,
+                {
+                    expiresIn: "15m",
+                }
+            );
+
+            const refreshToken = jwt.sign(
+                {
+                    user,
+                },
+                process.env.REFRESH_TOKEN_SECRET!,
+                {
+                    expiresIn: "7d",
+                }
+            );
+
+            res.cookie("jwt", refreshToken, {
+                httpOnly: true,
+                secure: true,
+                maxAge: 24 * 60 * 60 * 1000,
+            });
+
+            await User.findOneAndUpdate({ _id: user._id }, { refreshToken });
+            return logger.respondWithData(res, { accessToken }, 200);
+        } catch (error: any) {
+            return logger.respondWithError(
+                res,
+                new CustomError(error.message, 500)
+            );
+        }
+    }
+
+    /**
+     * @route POST /admin/register
+     * @description Register a new admin
+     * @access Public
+     */
+    async register(req: Request, res: Response): Promise<void> {
+        try {
+            const data = req.body;
+
+            // Check if the roles array includes 'admin'
+            if (!data.roles || !data.roles.includes("admin")) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("Only admins can access this route", 403)
+                );
+            }
+
+            // Check if an admin with the same email already exists
+            const existingUser = await User.findOne({ email: data.email });
+            if (existingUser) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("Email is already taken", 409)
+                );
+            }
+
+            // Create new admin user
+            const admin = new User({
+                ...data,
+                roles: ["user", "admin"],
+            });
+
+            await admin.save();
+
+            return logger.respond(
+                res,
+                `Admin ${admin.firstName} ${admin.lastName} registered successfully!`
+            );
+        } catch (error: any) {
+            return logger.respondWithError(
+                res,
+                new CustomError(error.message, 500)
             );
         }
     }

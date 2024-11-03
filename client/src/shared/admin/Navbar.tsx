@@ -1,84 +1,188 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Settings from "@mui/icons-material/Settings";
+import Window from "@mui/icons-material/Window";
+import { Button } from "@mui/material";
+import Verified from "@mui/icons-material/Verified";
+import Logout from "@mui/icons-material/Logout";
+import { useUser } from "../../context/UserContext";
+import { IoFileTray } from "react-icons/io5";
+
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../../features/auth/authApiSlice";
-import { IoLogOut, IoMenu, IoPerson, IoSettings } from "react-icons/io5";
+import { IoMenu } from "react-icons/io5";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Navbar = ({ toggleSidebar, profile }: any) => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+function stringToColor(string: string) {
+    let hash = 0;
+    let i;
 
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+        hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+
+    for (i = 0; i < 3; i += 1) {
+        const value = (hash >> (i * 8)) & 0xff;
+        color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
+}
+
+function stringAvatar(name: string) {
+    return {
+        sx: {
+            bgcolor: stringToColor(name),
+        },
+        children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    };
+}
+
+const Navbar = ({ toggleDrawer }: any) => {
     const navigate = useNavigate();
+    const userData: any = useUser();
 
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
     };
 
     const [logout, { isSuccess }] = useLogoutMutation();
 
-    useEffect(() => {
-        if (isSuccess) {
-            localStorage.removeItem("accessToken");
-            navigate("/");
-        }
-    }, [isSuccess, navigate]);
-
-    const onClick = () => logout(null);
+    const handleLogout = async () => {
+        await logout({});
+        navigate("/secure/sign-in");
+    };
 
     return (
-        <nav className="bg-deepNavyBlue text-white p-4 shadow-md">
+        <nav className="bg-deepNavyBlue text-white py-1 px-4 shadow-md border-b border-gray-700">
             <div className="container mx-auto flex justify-between items-center">
-                <div className="flex items-center">
-                    <button
-                        onClick={toggleSidebar}
-                        className="mr-4 block md:hidden"
-                    >
-                        <IoMenu className="text-white w-5 h-5" />
-                    </button>
+                <div className="flex items-center md:hidden">
+                    <Button onClick={toggleDrawer(true)}>
+                        <IoMenu className="text-4xl text-white border border-gray-600 p-1 rounded" />
+                    </Button>
                 </div>
-                <div className="relative flex items-center space-x-4">
-                    <div className="relative">
-                        <button
-                            className="flex items-center space-x-2"
-                            onClick={toggleDropdown}
+
+                <div className="hidden md:flex items-center space-x-1 ml-10">
+                    <IoFileTray />
+                    <span className="font-medium text-sm">
+                        Do you the latest update of Covid 2024?{" "}
+                        <span className="text-gray-400">
+                            An overview of ours is now available ...
+                        </span>
+                    </span>
+                </div>
+
+                <Box
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        textAlign: "center",
+                        marginBottom: "6px",
+                    }}
+                >
+                    <Tooltip title="Account settings">
+                        <IconButton
+                            onClick={handleClick}
+                            size="small"
+                            sx={{ ml: 2, gap: "10px" }}
+                            aria-controls={open ? "account-menu" : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? "true" : undefined}
                         >
-                            <img
-                                className="w-8 h-8 rounded-full"
-                                src={profile.user.profilePicture}
-                                alt="User Profile"
+                            <Avatar
+                                {...stringAvatar(
+                                    `${userData.user.firstName} ${userData.user.lastName}`
+                                )}
                             />
-                            <p className="flex gap-1">
-                                <span>{profile.user.firstName}</span>
-                                <span>{profile.user.lastName}</span>
-                            </p>
-                        </button>
-                        {isDropdownOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-20">
-                                <Link
-                                    to="profile"
-                                    className="px-4 py-2 text-gray-800 hover:bg-gray-200 flex gap-2 border-b-2"
-                                >
-                                    <IoPerson className="w-5 h-5" />
-                                    Profile
-                                </Link>
-                                <Link
-                                    to="profile"
-                                    className="flex gap-2 px-4 py-2 text-gray-800 hover:bg-gray-200 border-b-2"
-                                >
-                                    <IoSettings className="w-5 h-5" />
-                                    Settings
-                                </Link>
-                                <button
-                                    className="flex gap-2 w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200"
-                                    onClick={onClick}
-                                >
-                                    <IoLogOut className="w-5 h-5" />
-                                    Logout
-                                </button>
+                            <div className="flex flex-col text-sm items-start">
+                                <span className="text-green-600">
+                                    Connected
+                                </span>
+                                <span className="text-white">
+                                    {userData.user.firstName}{" "}
+                                    {userData.user.lastName}
+                                </span>
                             </div>
-                        )}
-                    </div>
-                </div>
+                        </IconButton>
+                    </Tooltip>
+                </Box>
+                <Menu
+                    anchorEl={anchorEl}
+                    id="account-menu"
+                    open={open}
+                    onClose={handleClose}
+                    onClick={handleClose}
+                    slotProps={{
+                        paper: {
+                            elevation: 0,
+                            sx: {
+                                overflow: "visible",
+                                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                                mt: 1.5,
+                                "& .MuiAvatar-root": {
+                                    width: 32,
+                                    height: 32,
+                                    ml: -0.5,
+                                    mr: 1,
+                                },
+                                "&::before": {
+                                    content: '""',
+                                    display: "block",
+                                    position: "absolute",
+                                    top: 0,
+                                    right: 14,
+                                    width: 10,
+                                    height: 10,
+                                    bgcolor: "background.paper",
+                                    transform: "translateY(-50%) rotate(45deg)",
+                                    zIndex: 0,
+                                },
+                            },
+                        },
+                    }}
+                    transformOrigin={{ horizontal: "right", vertical: "top" }}
+                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                >
+                    <MenuItem onClick={() => navigate("profile")}>
+                        <Avatar /> Profile
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem onClick={() => navigate("/")}>
+                        <ListItemIcon>
+                            <Window fontSize="small" />
+                        </ListItemIcon>
+                        View Site
+                    </MenuItem>
+                    <MenuItem onClick={() => navigate("settings")}>
+                        <ListItemIcon>
+                            <Settings fontSize="small" />
+                        </ListItemIcon>
+                        Settings
+                    </MenuItem>
+                    <MenuItem onClick={handleLogout}>
+                        <ListItemIcon>
+                            <Logout fontSize="small" />
+                        </ListItemIcon>
+                        Logout
+                    </MenuItem>
+                </Menu>
             </div>
         </nav>
     );

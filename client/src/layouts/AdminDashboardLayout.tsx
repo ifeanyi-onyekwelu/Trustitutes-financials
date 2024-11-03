@@ -1,39 +1,45 @@
 import { Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Sidebar from "../shared/admin/Sidebar";
 import Navbar from "../shared/admin/Navbar";
 import { useFetchUserProfileQuery } from "../features/user/userApiSlice";
+import { UserProvider } from "../context/UserContext";
+import SideBarDrawer from "../shared/user/Drawer";
 
 const AdminDashboardLayout = () => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
+    const toggleDrawer = (newOpen: boolean) => () => {
+        setOpen(newOpen);
     };
 
     const {
         data: profile,
         isLoading,
         isError,
-        error,
     } = useFetchUserProfileQuery("userProfile");
 
     if (isLoading) return <p>Loading...</p>;
-
     if (isError) return <p>An error occurred...</p>;
 
-    const content = (
-        <div className="flex h-screen bg-gray-200">
-            <Sidebar isOpen={isSidebarOpen} />
-            <div className="flex-1 flex flex-col overflow-hidden">
-                <Navbar toggleSidebar={toggleSidebar} profile={profile} />
-                <main className="flex-1 overflow-auto p-6">
-                    <Outlet />
-                </main>
+    return (
+        <UserProvider profile={profile}>
+            <div className="flex bg-[#0A0F2C]">
+                <Sidebar />
+                <SideBarDrawer open={open} toggleDrawer={toggleDrawer} />
+                <div className="md:ml-[20%] flex flex-col w-full md:w-[80%]">
+                    <Navbar
+                        toggleDrawer={toggleDrawer}
+                        open={open}
+                        profile={profile}
+                    />
+                    <main className="flex-1 overflow-auto p-6 min-h-screen">
+                        <Outlet />
+                    </main>
+                </div>
             </div>
-        </div>
+        </UserProvider>
     );
-
-    return content;
 };
+
 export default AdminDashboardLayout;

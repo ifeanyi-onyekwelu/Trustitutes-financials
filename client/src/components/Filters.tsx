@@ -2,7 +2,7 @@ const Filters = ({ onFilterChange }: any) => {
     return (
         <div className="bg-white p-4 shadow rounded-md mb-4">
             <div className="flex flex-wrap gap-4">
-                <div className="flex flex-col">
+                <div className="flex flex-col flex-1">
                     <label htmlFor="fromDate">From</label>
                     <input
                         type="date"
@@ -13,7 +13,7 @@ const Filters = ({ onFilterChange }: any) => {
                         }
                     />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col flex-1">
                     <label htmlFor="toDate">To</label>
                     <input
                         type="date"
@@ -24,7 +24,7 @@ const Filters = ({ onFilterChange }: any) => {
                         }
                     />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col flex-1">
                     <label htmlFor="type">Type</label>
                     <select
                         className="p-2 border rounded"
@@ -36,7 +36,7 @@ const Filters = ({ onFilterChange }: any) => {
                         <option value="withdrawal">Withdrawal</option>
                     </select>
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col flex-1">
                     <label htmlFor="status">Status</label>
                     <select
                         className="p-2 border rounded"
@@ -46,21 +46,9 @@ const Filters = ({ onFilterChange }: any) => {
                     >
                         <option value="">All Statuses</option>
                         <option value="pending">Pending</option>
-                        <option value="success">Success</option>
+                        <option value="succeded">Succeded</option>
                         <option value="failed">Failed</option>
                     </select>
-                </div>
-
-                <div className="flex flex-col flex-1">
-                    <label htmlFor="search">Search</label>
-                    <input
-                        type="text"
-                        className="p-2 border rounded flex-1"
-                        placeholder="Search (Name, type)"
-                        onChange={(e) =>
-                            onFilterChange("search", e.target.value)
-                        }
-                    />
                 </div>
             </div>
         </div>

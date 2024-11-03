@@ -2,6 +2,20 @@ import baseApi from "../../services/apiSlice";
 
 export const adminApiSlice = baseApi.injectEndpoints({
     endpoints: (builder) => ({
+        pama: builder.mutation({
+            query: (userData) => ({
+                url: "/admin/login",
+                method: "POST",
+                body: { ...userData },
+            }),
+        }),
+        register: builder.mutation({
+            query: (userData) => ({
+                url: "/admin/register",
+                method: "POST",
+                body: userData,
+            }),
+        }),
         fetchAllUsers: builder.query({
             query: () => ({
                 url: "/admin/users",
@@ -60,6 +74,8 @@ export const adminApiSlice = baseApi.injectEndpoints({
 });
 
 export const {
+    usePamaMutation,
+    useRegisterMutation,
     useFetchAllUsersQuery,
     useFetchAUserQuery,
     useFetchAllTransactionsQuery,
