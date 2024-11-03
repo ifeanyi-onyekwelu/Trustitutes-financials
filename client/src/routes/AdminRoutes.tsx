@@ -13,7 +13,7 @@ function AdminRoutes() {
                 <Route index element={<AdminDashboard />} />
                 <Route path="transactions" element={<AdminTransactions />} />
                 <Route path="users" element={<AdminUsers />} />
-                <Route path="users/:userId" element={<AdminUserDetails />} />
+                <Route path="manage-accounts" element={<AdminUsers />} />
                 <Route path="profile" element={<AdminProfile />} />
             </Route>
         </Routes>
