@@ -33,7 +33,7 @@ const FirstSection = ({
     ];
 
     return (
-        <div className="first-section flex flex-wrap">
+        <div className="first-section flex">
             {statsData.map((stat, index) => (
                 <div
                     className="credit flex-1 m-2 p-4 bg-gray-900 rounded-lg shadow-md"

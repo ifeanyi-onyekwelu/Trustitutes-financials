@@ -30,13 +30,15 @@ const UsersTable = ({ users }: any) => {
                                 key={user._id}
                                 className="border-t hover:bg-gray-50"
                             >
-                                <td className="px-4 py-2 text-gray-700">{`${user.firstName} ${user.lastName}`}</td>
+                                <td className="px-4 py-2 text-gray-700">
+                                    <span className="inline-block min-w-36">{`${user.firstName} ${user.lastName}`}</span>
+                                </td>
                                 <td className="px-4 py-2 text-gray-700">
                                     {user.email}
                                 </td>
                                 <td className="px-4 py-2 text-gray-700">
                                     <span
-                                        className={`inline-block p-2 text-sm font-semibold rounded-md ${
+                                        className={`inline-block p-2 text-xs md:text-sm  font-semibold rounded-md ${
                                             user.isActive
                                                 ? "bg-green-100 text-green-800"
                                                 : "bg-red-100 text-red-800"
@@ -47,7 +49,7 @@ const UsersTable = ({ users }: any) => {
                                 </td>
                                 <td className="px-4 py-2 text-gray-700">
                                     <span
-                                        className={`inline-block p-2 text-sm font-semibold rounded-md ${
+                                        className={`inline-block p-2 text-sm min-w-24 font-semibold rounded-md ${
                                             user.isVerified
                                                 ? "bg-blue-100 text-blue-800"
                                                 : "bg-yellow-100 text-yellow-800"

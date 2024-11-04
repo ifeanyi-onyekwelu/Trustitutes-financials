@@ -4,7 +4,7 @@ import Sidebar from "../shared/admin/Sidebar";
 import Navbar from "../shared/admin/Navbar";
 import { useFetchUserProfileQuery } from "../features/user/userApiSlice";
 import { UserProvider } from "../context/UserContext";
-import SideBarDrawer from "../shared/user/Drawer";
+import SideBarDrawer from "../shared/admin/Drawer";
 
 const AdminDashboardLayout = () => {
     const [open, setOpen] = useState(false);

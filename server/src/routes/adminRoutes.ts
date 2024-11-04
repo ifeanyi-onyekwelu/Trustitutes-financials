@@ -20,6 +20,12 @@ router.get(
 router.get("/users/:userId", protect, adminOnly, adminController.getUser);
 
 router.get("/accounts", protect, adminOnly, adminController.getAllAccounts);
+router.post(
+    "/accounts/:accountId/update",
+    protect,
+    adminOnly,
+    adminController.updateUserBalance
+);
 router.get(
     "/total-balance",
     protect,

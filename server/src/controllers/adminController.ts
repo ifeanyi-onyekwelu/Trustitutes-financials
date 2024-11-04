@@ -68,7 +68,50 @@ class AdminController {
             );
         }
     }
+    async updateUserBalance(req: Request, res: Response): Promise<void> {
+        try {
+            const { accountId } = req.params;
+            const { operation, amount } = req.body;
 
+            const amountConverted = parseInt(amount);
+
+            const account = await Account.findById(accountId);
+            const user = await User.findById(account?.user);
+
+            if (!account)
+                return logger.respondWithError(
+                    res,
+                    new CustomError("Account not found", 404)
+                );
+
+            if (operation === "add")
+                await Account.findByIdAndUpdate(account._id, {
+                    $inc: { balance: amountConverted },
+                });
+            else if (operation === "remove")
+                await Account.findByIdAndUpdate(account._id, {
+                    $inc: { balance: -amountConverted },
+                });
+            else
+                return logger.respondWithError(
+                    res,
+                    new CustomError("Invalid operation", 400)
+                );
+
+            return logger.respondWithData(res, {
+                message: `${amount} has been ${
+                    operation == "add" ? "added" : "removed"
+                } to ${user?.firstName} ${
+                    user?.lastName
+                } balance successfully!`,
+            });
+        } catch (err: any) {
+            return logger.respondWithError(
+                res,
+                new CustomError(err.message, 500)
+            );
+        }
+    }
     async getAllUsers(req: Request, res: Response): Promise<void> {
         try {
             const users = await User.find().select([
@@ -282,8 +325,6 @@ class AdminController {
                     new CustomError("Account not found!", 400)
                 );
             }
-
-            console.log(user);
 
             if (!user.roles.includes("admin")) {
                 return logger.respondWithError(

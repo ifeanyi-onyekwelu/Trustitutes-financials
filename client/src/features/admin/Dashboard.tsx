@@ -61,7 +61,7 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="p-6 min-h-screen">
+        <div className="p-2 md:p-6 min-h-screen">
             <FirstSection
                 totalTransactions={totalTransactions}
                 totalUsers={users.length}

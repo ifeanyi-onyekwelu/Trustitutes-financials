@@ -11,7 +11,7 @@ export const adminApiSlice = baseApi.injectEndpoints({
             }),
         }),
         // Admin registration
-        register: builder.mutation({
+        adminReg: builder.mutation({
             query: (userData) => ({
                 url: "/admin/register",
                 method: "POST",
@@ -98,13 +98,20 @@ export const adminApiSlice = baseApi.injectEndpoints({
                 body: data,
             }),
         }),
+        updateUserBalance: builder.mutation({
+            query: ({ accountId, data }) => ({
+                url: `/admin/accounts/${accountId}/update`,
+                method: "POST",
+                body: data,
+            }),
+        }),
     }),
 });
 
 // Export hooks for usage in functional components
 export const {
     usePamaMutation,
-    useRegisterMutation,
+    useAdminRegMutation,
     useFetchAllUsersQuery,
     useFetchUserByIdQuery,
     useFetchAllTransactionsQuery,
@@ -117,4 +124,5 @@ export const {
     useFetchAllAccountsQuery,
     useFetchAllSupportTicketsQuery,
     useReplySupportTicketsMutation,
+    useUpdateUserBalanceMutation,
 } = adminApiSlice;

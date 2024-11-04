@@ -32,37 +32,43 @@ const TransferForm = ({
                 indicatorColor="primary"
                 sx={{ bgcolor: "#111827" }}
             >
-                <Tab label="Regular Transfer" value="account" />
+                <Tab label="Inter Bank Transfer" value="account" />
+                <Tab label="Transfer to Other Banks" value="otherBank" />
                 <Tab label="Wire Transfer" value="wire" />
             </Tabs>
 
-            <InputField
-                label="Recipient Account Number"
-                value={toAccountNumber}
-                onChange={handleOnChange}
-                name="toAccountNumber"
-                type="number"
-                placeholder="Recipient Account Number"
-                required
-                extraInfo={
-                    isFetchingRecipient && toAccountNumber.length >= 10 ? (
-                        <div className="flex items-center space-x-2">
-                            <CircularProgress size={16} color="primary" />
-                            <p className="text-blue-500">Checking account...</p>
-                        </div>
-                    ) : recipientName && toAccountNumber.length >= 10 ? (
-                        <div className="flex items-center bg-green-100 text-green-700 p-2 rounded-lg font-bold">
-                            <CheckCircle className="mr-2" />
-                            Account Holder: {recipientName}
-                        </div>
-                    ) : toAccountNumber.length >= 10 && !isFetchingRecipient ? (
-                        <div className="flex items-center bg-red-100 text-red-700 p-2 rounded-lg font-bold">
-                            <Error className="mr-2" />
-                            Account not found.
-                        </div>
-                    ) : null
-                }
-            />
+            {selectedTab === "account" && (
+                <InputField
+                    label="Recipient Account Number"
+                    value={toAccountNumber}
+                    onChange={handleOnChange}
+                    name="toAccountNumber"
+                    type="number"
+                    placeholder="Recipient Account Number"
+                    required
+                    extraInfo={
+                        isFetchingRecipient && toAccountNumber.length >= 10 ? (
+                            <div className="flex items-center space-x-2">
+                                <CircularProgress size={16} color="primary" />
+                                <p className="text-blue-500">
+                                    Checking account...
+                                </p>
+                            </div>
+                        ) : recipientName && toAccountNumber.length >= 10 ? (
+                            <div className="flex items-center bg-green-100 text-green-700 p-2 rounded-lg font-bold">
+                                <CheckCircle className="mr-2" />
+                                Account Holder: {recipientName}
+                            </div>
+                        ) : toAccountNumber.length >= 10 &&
+                          !isFetchingRecipient ? (
+                            <div className="flex items-center bg-red-100 text-red-700 p-2 rounded-lg font-bold">
+                                <Error className="mr-2" />
+                                Account not found.
+                            </div>
+                        ) : null
+                    }
+                />
+            )}
 
             {selectedTab === "wire" && (
                 <>
@@ -102,6 +108,29 @@ const TransferForm = ({
                         onChange={handleOnChange}
                         type="text"
                         placeholder="Recipient's Address"
+                        required
+                    />
+                </>
+            )}
+
+            {selectedTab === "otherBank" && (
+                <>
+                    <InputField
+                        label="Bank Name"
+                        value={wireDetails.bankName}
+                        name="bankName"
+                        onChange={handleOnChange}
+                        type="text"
+                        placeholder="Bank Name"
+                        required
+                    />
+                    <InputField
+                        label="Recipient Account Number"
+                        value={toAccountNumber}
+                        onChange={handleOnChange}
+                        name="toAccountNumber"
+                        type="number"
+                        placeholder="Recipient Account Number"
                         required
                     />
                 </>

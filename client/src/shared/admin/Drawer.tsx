@@ -28,22 +28,22 @@ const SideBarDrawer = ({ open, toggleDrawer }: any) => {
             icon: <IoHome className="w-5 h-5" />,
         },
         {
-            to: "/transactions",
+            to: "transactions",
             label: "Transaction History",
             icon: <VscHistory className="w-5 h-5" />,
         },
         {
-            to: "/accounts",
+            to: "accounts",
             label: "Manage Accounts",
             icon: <BiMoney className="w-5 h-5" />,
         },
         {
-            to: "/users",
+            to: "users",
             label: "User Management",
             icon: <AiOutlineUser className="w-5 h-5" />,
         },
         {
-            to: "/support-tickets",
+            to: "support-tickets",
             label: "Support Tickets",
             icon: <BiSupport className="w-5 h-5" />,
         },

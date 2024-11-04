@@ -103,6 +103,7 @@ class AuthController {
 
             const user = new User({
                 ...data,
+                isActive: false,
                 roles: ["user"],
             });
 

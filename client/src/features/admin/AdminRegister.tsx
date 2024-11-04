@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import Image from "../../assets/img/auth.jpg";
-import { useRegisterMutation } from "./adminApiSlie";
+import { useAdminRegMutation } from "./adminApiSlie";
 import Alert from "../../components/common/Alert";
 import InputField from "../../components/common/InputField";
 
@@ -30,7 +30,7 @@ const Register = () => {
     const [showAlert, setShowAlert] = useState<boolean>(false);
 
     const navigate = useNavigate();
-    const [register, { isLoading }] = useRegisterMutation();
+    const [register, { isLoading }] = useAdminRegMutation();
 
     const handleOnSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
