@@ -7,13 +7,13 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { IoHome } from "react-icons/io5";
-import { RiAdminFill } from "react-icons/ri";
 import { AiOutlineUser } from "react-icons/ai";
 import { VscHistory } from "react-icons/vsc";
 import { BiSupport, BiMoney } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useFetchUserAccountQuery } from "../../features/user/userApiSlice";
 import formatAmount from "../../config/formatAmount";
+import Logo from "../../assets/img/logo.png";
 
 const SideBarDrawer = ({ open, toggleDrawer }: any) => {
     const { data: accountData } = useFetchUserAccountQuery("userAccount");
@@ -60,8 +60,8 @@ const SideBarDrawer = ({ open, toggleDrawer }: any) => {
             role="presentation"
             onClick={toggleDrawer(false)}
         >
-            <div className="border-b border-gray-700 p-5 mb-10">
-                <h1>Dashboard</h1>
+            <div className="border-b border-gray-700 p-5 mb-10 flex items-center justify-center">
+                <img src={Logo} alt="Logo" width={100} />
             </div>
 
             <div className="p-4 space-y-1 mb-5">

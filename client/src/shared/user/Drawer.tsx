@@ -6,15 +6,13 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useFetchUserAccountQuery } from "../../features/user/userApiSlice";
 import { IoHome, IoWalletSharp } from "react-icons/io5";
-import { RiSecurePaymentFill } from "react-icons/ri";
 import { AiFillCreditCard } from "react-icons/ai";
 import { VscHistory } from "react-icons/vsc";
 import formatAmount from "../../config/formatAmount";
+import Logo from "../../assets/img/logo.png";
 
 const SideBarDrawer = ({ open, toggleDrawer }: any) => {
     const location = useLocation();
@@ -58,8 +56,8 @@ const SideBarDrawer = ({ open, toggleDrawer }: any) => {
             role="presentation"
             onClick={toggleDrawer(false)}
         >
-            <div className="border-b border-gray-700 p-5 mb-10">
-                <h1>Dashboard</h1>
+            <div className="border-b border-gray-700 p-5 mb-10 flex items-center justify-center">
+                <img src={Logo} alt="Logo" width={100} />
             </div>
 
             <div className="p-4 space-y-1 mb-5">

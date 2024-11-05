@@ -6,12 +6,15 @@ import {
     IoLogoTwitter,
 } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import Logo from "../assets/img/logo.png";
 
 const Footer = () => {
     const companyLinks = [
+        { name: "Home", to: "" },
+        { name: "Accounts", to: "/accounts" },
+        { name: "Services", to: "/services" },
+        { name: "Loans & Credits", to: "/loans" },
         { name: "About Us", to: "/about-us" },
-        { name: "Account", to: "/account" },
-        { name: "Affiliate", to: "/affiliate" },
     ];
 
     const supportLinks = [
@@ -24,12 +27,17 @@ const Footer = () => {
             <div className="w-full">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="text-center mb-6">
-                        <img src="" alt="Logo" className="mb-4 mx-auto" />
+                        <img
+                            src={Logo}
+                            alt="Logo"
+                            width={150}
+                            className="block m-auto my-2"
+                        />
                         <p className="text-lg text-gray-600">
                             A modern, technology-first bank built for you and
                             your growing business.
                         </p>
-                        <div className="flex justify-center mt-4">
+                        <div className="flex justify-center mt-4 gap-3">
                             <IoLogoFacebook />
                             <IoLogoTwitter />
                             <IoLogoLinkedin />
@@ -60,7 +68,6 @@ const Footer = () => {
                         <ul>
                             {supportLinks.map((link, index) => (
                                 <li key={index} className="group relative mb-2">
-                                    <IoChevronForward className="h-4 w-4 absolute right-0 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                     <Link
                                         to={link.to}
                                         className="text-gray-500 hover:text-gray-700 transition-colors duration-300"
@@ -78,15 +85,15 @@ const Footer = () => {
                         <p className="text-gray-600 mb-2">
                             Stay updated with the latest news and offers.
                         </p>
-                        <form className="flex items-center justify-center">
+                        <form className="flex items-center justify-center w-full">
                             <input
                                 type="email"
-                                className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 transition-colors duration-300"
+                                className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 transition-colors duration-300 w-full"
                                 placeholder="Your Email Address"
                             />
                             <button
                                 type="submit"
-                                className="bg-deepNavyBlue hover:bg-black text-white px-4 py-2 ml-2 rounded-md focus:outline-none transition-colors duration-300"
+                                className="bg-primary hover:bg-black text-white px-4 py-2 ml-2 rounded-md focus:outline-none transition-colors duration-300"
                             >
                                 Subscribe
                             </button>
@@ -95,7 +102,7 @@ const Footer = () => {
                 </div>
                 <div className="text-center mt-8">
                     <p className="text-gray-600">
-                        &copy; 2024 PayFox. All Rights Reserved.
+                        &copy; 2024 Trustitues Financials. All Rights Reserved.
                     </p>
                     <div className="mt-2">
                         <Link

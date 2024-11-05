@@ -1,11 +1,11 @@
 import { IoHome } from "react-icons/io5";
-import { RiAdminFill } from "react-icons/ri";
 import { AiOutlineUser } from "react-icons/ai";
 import { VscHistory } from "react-icons/vsc";
 import { BiSupport, BiMoney } from "react-icons/bi";
 import { Link, useLocation } from "react-router-dom";
 import { useFetchTotalBalanceQuery } from "../../features/admin/adminApiSlie";
 import formatAmount from "../../config/formatAmount";
+import Logo from "../../assets/img/logo.png";
 
 const Sidebar = () => {
     const location = useLocation();
@@ -49,8 +49,8 @@ const Sidebar = () => {
             className={`bg-dashboard text-white w-[20%] fixed transition-all duration-200 ease-in-out md:block hidden border-r border-gray-700 overflow-auto`}
             id="sidebar"
         >
-            <div className="border-b border-gray-700 p-5 mb-10">
-                <h1>Dashboard</h1>
+            <div className="border-b border-gray-700 p-5 mb-10 flex items-center justify-center">
+                <img src={Logo} alt="Logo" width={100} />
             </div>
 
             <div className="px-6 space-y-1 mb-10">
