@@ -16,7 +16,6 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import UpdateTransactionDate from "./adminPages/UpdateTransactionDate";
 
 interface Transaction {
     _id: string;
@@ -109,7 +108,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
     );
 }
 
-const TransactionsTable: React.FC<TransactionsTableProps> = ({
+const UserTransactionsTable: React.FC<TransactionsTableProps> = ({
     transactions,
 }) => {
     const [page, setPage] = React.useState(0);
@@ -158,7 +157,6 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
                         <TableCell>Status</TableCell>
                         <TableCell>Reference</TableCell>
                         <TableCell>Description</TableCell>
-                        <TableCell>Action</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -182,17 +180,6 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
                             <TableCell>{transaction.status}</TableCell>
                             <TableCell>{transaction.reference}</TableCell>
                             <TableCell>{transaction.description}</TableCell>
-                            <TableCell>
-                                <Button
-                                    type="button"
-                                    variant="contained"
-                                    onClick={() =>
-                                        openUpdateModal(transaction._id)
-                                    }
-                                >
-                                    Update
-                                </Button>
-                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
@@ -210,17 +197,8 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
                     </TableRow>
                 </TableFooter>
             </Table>
-
-            {/* Modal placed outside the .map() loop */}
-            {selectedTransactionId && (
-                <UpdateTransactionDate
-                    open={showUpdateTransactionModal}
-                    onClose={closeUpdateModal}
-                    transactionId={selectedTransactionId}
-                />
-            )}
         </TableContainer>
     );
 };
 
-export default TransactionsTable;
+export default UserTransactionsTable;

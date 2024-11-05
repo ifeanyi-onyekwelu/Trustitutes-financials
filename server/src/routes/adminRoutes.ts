@@ -63,7 +63,29 @@ router.get(
     adminOnly,
     adminController.getTransaction
 );
-router.get("/support-tickets", adminController.getAllTickets);
-router.post("/support-tickets/:ticketId/reply", adminController.replyToTicket);
+router.put(
+    "/transactions/:transactionId/update",
+    protect,
+    adminOnly,
+    adminController.updateTransactionDate
+);
+router.get(
+    "/support-tickets",
+    protect,
+    adminOnly,
+    adminController.getAllTickets
+);
+router.post(
+    "/support-tickets/:ticketId/reply",
+    protect,
+    adminOnly,
+    adminController.replyToTicket
+);
+router.get(
+    "/support-tickets/:ticketId",
+    protect,
+    adminOnly,
+    adminController.getASupportTicket
+);
 
 export default router;

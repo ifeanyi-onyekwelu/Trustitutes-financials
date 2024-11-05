@@ -4,6 +4,7 @@ import { IoClose, IoMenu } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../features/auth/authSlice";
 import { RootState } from "../app/store";
+import Logo from "../assets/img/logo.png";
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -29,7 +30,7 @@ const Header = () => {
                 <div className="flex justify-between h-16 items-center">
                     <div className="flex ">
                         <div className="flex-shrink-0 flex items-center">
-                            <h1>Banking</h1>
+                            <img src={Logo} alt="Logo" width={100} />
                         </div>
                     </div>
                     <div className="hidden md:flex space-x-4 items-center">

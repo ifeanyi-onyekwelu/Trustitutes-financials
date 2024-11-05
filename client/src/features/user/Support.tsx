@@ -49,6 +49,9 @@ const Support = () => {
             setSuccessMessage("Support ticket created successfully!");
             setStatusType("success");
             setShowAlert(true);
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
         } catch (error: any) {
             setErrorMessage(
                 error.data.message || "Failed to create support ticket"

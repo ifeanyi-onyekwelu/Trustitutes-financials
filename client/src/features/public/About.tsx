@@ -28,7 +28,7 @@ const About = () => {
                 <div className="container mx-auto flex flex-col md:flex-row items-center justify-between space-y-8 md:space-y-0 md:space-x-10">
                     <div className="w-full md:w-1/2 text-start md:text-center md:px-10 px-5">
                         <SectionHeader
-                            h3Text="About Company"
+                            h3Text="About Trustitutes Financials"
                             h1Text="Your Right Path To Smart Financial Decisions"
                             align="start"
                         />

@@ -8,20 +8,14 @@ import {
 } from "@mui/material";
 import InputField from "../common/InputField";
 import {
-    useUpdateUserBalanceMutation,
-    useFetchAccountQuery,
+    useFetchTransactionByIdQuery,
+    useUpdateTransactionDateMutation,
 } from "../../features/admin/adminApiSlie";
 import Alert from "../common/Alert";
 
-const UpdateBalanceModal = ({
-    open,
-    onClose,
-    accountId,
-    onBalanceUpdate,
-}: any) => {
+const UpdateTransactionDate = ({ open, onClose, transactionId }: any) => {
     const [formData, setFormData] = useState({
-        amount: "",
-        operation: "add",
+        date: new Date().toISOString().slice(0, 10), // Default to current date in YYYY-MM-DD format
     });
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
@@ -37,43 +31,32 @@ const UpdateBalanceModal = ({
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
-    const [updateBalance, { isLoading }] = useUpdateUserBalanceMutation();
-    const { data: accountData, isLoading: accountLoading } =
-        useFetchAccountQuery(accountId);
+    const { data: transactionData, isLoading: transactionLoading } =
+        useFetchTransactionByIdQuery(transactionId);
 
-    const account = accountData?.account || {};
+    const [updateTransactionDate] = useUpdateTransactionDateMutation();
 
-    if (accountLoading) return <p>Loading...</p>;
+    if (transactionLoading) return <p>Loading...</p>;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
-            const response = await updateBalance({
-                accountId,
+            const response = await updateTransactionDate({
+                transactionId,
                 data: formData,
             }).unwrap();
-
-            const newBalance =
-                formData.operation === "add"
-                    ? account.balance + parseFloat(formData.amount)
-                    : account.balance - parseFloat(formData.amount);
-
-            onBalanceUpdate(accountId, newBalance); // Call the update handler
-
-            setSuccessMessage("User balance updated successfully");
+            console.log(response);
+            setSuccessMessage("Transaction date updated successfully");
             setStatusType("success");
             setShowAlert(true);
-
-            setTimeout(() => {
-                onClose();
-            }, 2000);
         } catch (e: any) {
-            console.error("Error:", e);
-            setErrorMessage(e.data.message || "Balance update failed");
+            setErrorMessage(e.data.message || "Date update failed");
             setStatusType("error");
             setShowAlert(true);
         }
+
+        onClose();
     };
 
     return (
@@ -89,7 +72,7 @@ const UpdateBalanceModal = ({
                         textAlign: "center",
                     }}
                 >
-                    Update Balance
+                    Update Transaction Date
                 </DialogTitle>
                 <form onSubmit={handleSubmit} className="bg-dashboard p-5">
                     <DialogContent
@@ -100,39 +83,11 @@ const UpdateBalanceModal = ({
                         }}
                     >
                         <InputField
-                            label="Full Name"
-                            value={`${account?.user?.firstName} ${account?.user?.lastName}`}
+                            label="Transaction Date"
+                            value={formData.date}
                             onChange={handleInputChange}
-                            name="user"
-                            type="string"
-                            disabled={true}
-                        />
-                        <InputField
-                            label="Operation"
-                            value={formData.operation}
-                            onChange={handleInputChange}
-                            name="operation"
-                            type="select"
-                            required
-                            placeholder="Select an op"
-                            options={[
-                                {
-                                    value: "add",
-                                    label: "Add",
-                                },
-                                {
-                                    value: "remove",
-                                    label: "Remove",
-                                },
-                            ]}
-                        />
-                        <InputField
-                            label="Amount"
-                            value={formData.amount}
-                            onChange={handleInputChange}
-                            name="amount"
-                            type="number"
-                            placeholder="Enter Amount"
+                            name="date"
+                            type="date"
                             required
                         />
                     </DialogContent>
@@ -148,9 +103,8 @@ const UpdateBalanceModal = ({
                             type="submit"
                             variant="contained"
                             color="primary"
-                            disabled={isLoading}
                         >
-                            {isLoading ? "Processing..." : "Update Balance"}
+                            Update Date
                         </Button>
                     </DialogActions>
                 </form>
@@ -169,4 +123,4 @@ const UpdateBalanceModal = ({
     );
 };
 
-export default UpdateBalanceModal;
+export default UpdateTransactionDate;

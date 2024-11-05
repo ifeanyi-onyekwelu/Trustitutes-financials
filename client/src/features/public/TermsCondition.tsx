@@ -75,9 +75,9 @@ const TermsCondition = () => {
                             - All content on the Platform, including but not
                             limited to text, graphics, logos, button icons,
                             images, audio clips, digital downloads, data
-                            compilations, and software, is the property of [Your
-                            Company Name] or its content suppliers and is
-                            protected by copyright laws.
+                            compilations, and software, is the property of
+                            Trustitutes Financials or its content suppliers and
+                            is protected by copyright laws.
                         </li>
                         <li>
                             {" "}

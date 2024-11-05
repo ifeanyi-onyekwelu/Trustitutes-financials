@@ -64,6 +64,13 @@ export const adminApiSlice = baseApi.injectEndpoints({
                 method: "GET",
             }),
         }),
+        updateTransactionDate: builder.mutation({
+            query: ({ transactionId, data }) => ({
+                url: `/admin/transactions/${transactionId}/update`,
+                method: "PUT",
+                body: data,
+            }),
+        }),
         // Suspend a user account
         suspendUserAccount: builder.mutation({
             query: (userId) => ({
@@ -88,6 +95,12 @@ export const adminApiSlice = baseApi.injectEndpoints({
         fetchAllSupportTickets: builder.query({
             query: () => ({
                 url: `/admin/support-tickets`,
+                method: "GET",
+            }),
+        }),
+        fetchSupportTicketById: builder.query({
+            query: (ticketId) => ({
+                url: `/admin/support-tickets/${ticketId}`,
                 method: "GET",
             }),
         }),
@@ -116,6 +129,7 @@ export const {
     useFetchUserByIdQuery,
     useFetchAllTransactionsQuery,
     useFetchTransactionByIdQuery,
+    useUpdateTransactionDateMutation,
     useSuspendUserAccountMutation,
     useActivateUserAccountMutation,
     useDeleteUserAccountMutation,
@@ -123,6 +137,7 @@ export const {
     useFetchTotalBalanceQuery,
     useFetchAllAccountsQuery,
     useFetchAllSupportTicketsQuery,
+    useFetchSupportTicketByIdQuery,
     useReplySupportTicketsMutation,
     useUpdateUserBalanceMutation,
 } = adminApiSlice;

@@ -1,4 +1,4 @@
-import TransactionsTable from "../../components/TransactionsTable";
+import UserTransactionsTable from "./TransactionTable";
 import { useFetchTransactionsQuery } from "./userApiSlice";
 
 const Transaction = () => {
@@ -9,7 +9,7 @@ const Transaction = () => {
     return (
         <div className="bg-dashboard">
             <div className="container mx-auto p-4">
-                <TransactionsTable transactions={transactions} />
+                <UserTransactionsTable transactions={transactions} />
             </div>
         </div>
     );

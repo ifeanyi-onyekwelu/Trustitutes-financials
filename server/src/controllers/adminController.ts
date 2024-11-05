@@ -7,6 +7,7 @@ import logger from "@/utils/logger";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import SupportTicket from "@/models/SupportTicket";
+import generateRandomReference from "@/utils/generateRefence";
 
 class AdminController {
     async getAllAccounts(req: Request, res: Response): Promise<void> {
@@ -74,36 +75,71 @@ class AdminController {
             const { operation, amount } = req.body;
 
             const amountConverted = parseInt(amount);
+            if (isNaN(amountConverted)) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("Invalid amount", 400)
+                );
+            }
 
             const account = await Account.findById(accountId);
-            const user = await User.findById(account?.user);
-
-            if (!account)
+            if (!account) {
                 return logger.respondWithError(
                     res,
                     new CustomError("Account not found", 404)
                 );
+            }
 
-            if (operation === "add")
+            const user = await User.findById(account.user);
+            if (!user) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("User not found", 404)
+                );
+            }
+
+            // Update the balance based on the operation
+            let newBalance;
+            if (operation === "add") {
+                newBalance = account.balance + amountConverted;
                 await Account.findByIdAndUpdate(account._id, {
                     $inc: { balance: amountConverted },
                 });
-            else if (operation === "remove")
+            } else if (operation === "remove") {
+                newBalance = account.balance - amountConverted;
                 await Account.findByIdAndUpdate(account._id, {
                     $inc: { balance: -amountConverted },
                 });
-            else
+            } else {
                 return logger.respondWithError(
                     res,
                     new CustomError("Invalid operation", 400)
                 );
+            }
+
+            // Create a new transaction
+            const transactionType =
+                operation === "add" ? "deposit" : "withdrawal";
+            const transaction = new Transaction({
+                userId: user._id,
+                fromAccount: operation === "remove" ? account._id : null,
+                toAccount: operation === "add" ? account._id : null,
+                amount: amountConverted,
+                status: "succeded",
+                type: transactionType,
+                description: `${transactionType} of ${amount} to account ${account._id}`,
+                reference: generateRandomReference(), // Generate a unique reference ID
+                date: new Date(),
+            });
+
+            await transaction.save();
 
             return logger.respondWithData(res, {
                 message: `${amount} has been ${
-                    operation == "add" ? "added" : "removed"
-                } to ${user?.firstName} ${
-                    user?.lastName
-                } balance successfully!`,
+                    operation === "add" ? "added to" : "removed from"
+                } ${user.firstName} ${user.lastName}'s balance successfully!`,
+                newBalance,
+                transaction,
             });
         } catch (err: any) {
             return logger.respondWithError(
@@ -269,6 +305,33 @@ class AdminController {
             );
         }
     }
+    async updateTransactionDate(req: Request, res: Response): Promise<void> {
+        try {
+            const { transactionId } = req.params;
+            const { date } = req.body;
+            const transaction = await Transaction.findOne({
+                _id: transactionId,
+            });
+
+            if (!transaction)
+                return logger.respondWithError(
+                    res,
+                    new CustomError("Transaction not found", 404)
+                );
+
+            console.log(transactionId, date);
+            await Transaction.findByIdAndUpdate(transaction._id, {
+                $set: { date },
+            });
+
+            return logger.respondWithData(res, { transaction });
+        } catch (err: any) {
+            return logger.respondWithError(
+                res,
+                new CustomError(err.message, 500)
+            );
+        }
+    }
     async getAllTickets(req: Request, res: Response): Promise<void> {
         try {
             const tickets = await SupportTicket.find().populate(
@@ -283,10 +346,21 @@ class AdminController {
             );
         }
     }
+    async getASupportTicket(req: Request, res: Response): Promise<void> {
+        const { ticketId } = req.params;
+
+        const supportTicket = await SupportTicket.findById(ticketId);
+
+        return logger.respondWithData(
+            res,
+            { message: "Support Ticket retreived: ", supportTicket },
+            200
+        );
+    }
     async replyToTicket(req: Request, res: Response): Promise<void> {
         try {
             const { ticketId } = req.params;
-            const { response } = req.body;
+            const { reply } = req.body;
 
             const ticket = await SupportTicket.findById(ticketId);
             if (!ticket) {
@@ -296,7 +370,7 @@ class AdminController {
                 );
             }
 
-            ticket.response = response;
+            ticket.response = reply;
             ticket.status = "resolved";
             ticket.resolvedAt = new Date();
             await ticket.save();

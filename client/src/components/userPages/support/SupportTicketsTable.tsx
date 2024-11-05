@@ -16,6 +16,7 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { Button } from "@mui/material";
+import SupportTicketDetails from "./ViewSupportDialog";
 
 interface SupportTicket {
     _id: string;
@@ -111,11 +112,25 @@ const SupportTicketsTable: React.FC<SupportTicketsTableProps> = ({
 }) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [open, setOpen] = React.useState(false);
+    const [selectedTicket, setSelectedTicket] =
+        React.useState<SupportTicket | null>(null);
+
+    const handleClose = () => {
+        setOpen(false);
+        setSelectedTicket(null); // Clear the selected ticket when closing
+    };
+
+    const handleViewClick = (ticket: SupportTicket) => {
+        setSelectedTicket(ticket);
+        setOpen(true);
+    };
 
     const handleChangePage = (
         event: React.MouseEvent<HTMLButtonElement> | null,
         newPage: number
     ) => setPage(newPage);
+
     const handleChangeRowsPerPage = (
         event: React.ChangeEvent<
             HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -126,77 +141,89 @@ const SupportTicketsTable: React.FC<SupportTicketsTableProps> = ({
     };
 
     return (
-        <TableContainer component={Paper}>
-            <Table
-                sx={{ minWidth: 650, bgcolor: "#333e" }}
-                aria-label="supportTicket history table"
-            >
-                <TableHead>
-                    <TableRow>
-                        {[
-                            "Department",
-                            "Ticket ID",
-                            "Date",
-                            "Status",
-                            "Action",
-                        ].map((text, index) => (
-                            <TableCell key={index} sx={{ color: "#fff" }}>
-                                {text}
-                            </TableCell>
-                        ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {(rowsPerPage > 0
-                        ? supportTickets.slice(
-                              page * rowsPerPage,
-                              page * rowsPerPage + rowsPerPage
-                          )
-                        : supportTickets
-                    ).map((supportTicket) => (
-                        <TableRow key={supportTicket._id}>
-                            <TableCell sx={{ color: "#fff" }}>
-                                {supportTicket.department}
-                            </TableCell>
-                            <TableCell sx={{ color: "#fff" }}>
-                                {supportTicket._id}
-                            </TableCell>
-                            <TableCell align="right" sx={{ color: "#fff" }}>
-                                {new Date(
-                                    supportTicket.createdAt
-                                ).toLocaleDateString()}
-                            </TableCell>
-                            <TableCell sx={{ color: "#fff" }}>
-                                {supportTicket.status}
-                            </TableCell>
-                            <TableCell sx={{ color: "#fff" }}>
-                                <Button
-                                    type="button"
-                                    variant="contained"
-                                    color="primary"
-                                >
-                                    View
-                                </Button>
-                            </TableCell>
+        <>
+            <TableContainer component={Paper}>
+                <Table
+                    sx={{ minWidth: 650, bgcolor: "#333e" }}
+                    aria-label="supportTicket history table"
+                >
+                    <TableHead>
+                        <TableRow>
+                            {[
+                                "Department",
+                                "Ticket ID",
+                                "Date",
+                                "Status",
+                                "Action",
+                            ].map((text, index) => (
+                                <TableCell key={index} sx={{ color: "#fff" }}>
+                                    {text}
+                                </TableCell>
+                            ))}
                         </TableRow>
-                    ))}
-                </TableBody>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination
-                            sx={{ color: "#fff" }}
-                            rowsPerPageOptions={[5, 10]}
-                            count={supportTickets.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={TablePaginationActions}
-                        />
-                    </TableRow>
-                </TableFooter>
-            </Table>
-        </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                        {(rowsPerPage > 0
+                            ? supportTickets.slice(
+                                  page * rowsPerPage,
+                                  page * rowsPerPage + rowsPerPage
+                              )
+                            : supportTickets
+                        ).map((supportTicket) => (
+                            <TableRow key={supportTicket._id}>
+                                <TableCell sx={{ color: "#fff" }}>
+                                    {supportTicket.department}
+                                </TableCell>
+                                <TableCell sx={{ color: "#fff" }}>
+                                    {supportTicket._id}
+                                </TableCell>
+                                <TableCell sx={{ color: "#fff" }}>
+                                    {new Date(
+                                        supportTicket.createdAt
+                                    ).toLocaleDateString()}
+                                </TableCell>
+                                <TableCell sx={{ color: "#fff" }}>
+                                    {supportTicket.status}
+                                </TableCell>
+                                <TableCell sx={{ color: "#fff" }}>
+                                    <Button
+                                        type="button"
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() =>
+                                            handleViewClick(supportTicket)
+                                        }
+                                    >
+                                        View
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                sx={{ color: "#fff" }}
+                                rowsPerPageOptions={[5, 10]}
+                                count={supportTickets.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                            />
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </TableContainer>
+
+            {/* Modal to view selected ticket details */}
+            <SupportTicketDetails
+                open={open}
+                onClose={handleClose}
+                ticket={selectedTicket} // Pass the selected ticket to the dialog
+            />
+        </>
     );
 };
 

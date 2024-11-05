@@ -36,11 +36,6 @@ const SideBarDrawer = ({ open, toggleDrawer }: any) => {
             icon: <IoWalletSharp className="w-5 h-5" />,
         },
         {
-            to: "pay-bills",
-            label: "Pay Bills",
-            icon: <RiSecurePaymentFill className="w-5 h-5" />,
-        },
-        {
             to: "card/virtual/add",
             label: "Virtual Cards",
             icon: <AiFillCreditCard className="w-5 h-5" />,
