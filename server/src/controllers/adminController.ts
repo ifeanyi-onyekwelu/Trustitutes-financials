@@ -363,16 +363,17 @@ class AdminController {
             const { reply } = req.body;
 
             const ticket = await SupportTicket.findById(ticketId);
-            if (!ticket) {
+            if (!ticket || !ticket.user) {
                 return logger.respondWithError(
                     res,
-                    new CustomError("Ticket not found", 404)
+                    new CustomError("Ticket or user not found", 404)
                 );
             }
 
             ticket.response = reply;
             ticket.status = "resolved";
             ticket.resolvedAt = new Date();
+
             await ticket.save();
 
             return logger.respondWithData(res, {
@@ -380,6 +381,7 @@ class AdminController {
                 ticket,
             });
         } catch (err: any) {
+            console.log(err);
             return logger.respondWithError(
                 res,
                 new CustomError(err.message, 500)

@@ -104,7 +104,7 @@ export const adminApiSlice = baseApi.injectEndpoints({
                 method: "GET",
             }),
         }),
-        replySupportTickets: builder.mutation({
+        replySupportTicket: builder.mutation({
             query: ({ ticketId, data }) => ({
                 url: `/admin/support-tickets/${ticketId}/reply`,
                 method: "POST",
@@ -138,6 +138,6 @@ export const {
     useFetchAllAccountsQuery,
     useFetchAllSupportTicketsQuery,
     useFetchSupportTicketByIdQuery,
-    useReplySupportTicketsMutation,
+    useReplySupportTicketMutation,
     useUpdateUserBalanceMutation,
 } = adminApiSlice;

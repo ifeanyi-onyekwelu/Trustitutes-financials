@@ -8,6 +8,7 @@ import { AppDispatch } from "../../app/store";
 import { setCredentials } from "./authSlice";
 import Alert from "../../components/common/Alert";
 import InputField from "../../components/common/InputField";
+import { LoadingBackdrop } from "../../components/common/LoadingBackdrop";
 
 interface FormData {
     accountNumber: string;
@@ -140,6 +141,8 @@ const Login = () => {
                     setShowAlert={setShowAlert}
                 />
             )}
+
+            <LoadingBackdrop open={isLoading} />
         </>
     );
 };

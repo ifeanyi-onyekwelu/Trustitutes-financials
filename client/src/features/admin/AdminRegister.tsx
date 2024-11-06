@@ -5,6 +5,7 @@ import Image from "../../assets/img/auth.jpg";
 import { useAdminRegMutation } from "./adminApiSlie";
 import Alert from "../../components/common/Alert";
 import InputField from "../../components/common/InputField";
+import { LoadingBackdrop } from "../../components/common/LoadingBackdrop";
 
 interface FormData {
     firstName: string;
@@ -185,6 +186,8 @@ const Register = () => {
                     setShowAlert={setShowAlert}
                 />
             )}
+
+            <LoadingBackdrop open={isLoading} />
         </>
     );
 };

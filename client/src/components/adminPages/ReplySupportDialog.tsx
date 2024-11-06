@@ -7,14 +7,16 @@ import {
     Button,
 } from "@mui/material";
 import {
-    useReplySupportTicketsMutation,
+    useReplySupportTicketMutation,
     useFetchSupportTicketByIdQuery,
 } from "../../features/admin/adminApiSlie";
 import Alert from "../common/Alert";
 import InputField from "../common/InputField";
 
 const ReplySupportDialog = ({ open, onClose, ticketId }: any) => {
-    const [reply, setReply] = useState("");
+    const [formData, setFormData] = useState({
+        reply: "",
+    });
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
     const [statusType, setStatusType] = useState<"error" | "success">("error");
@@ -25,23 +27,33 @@ const ReplySupportDialog = ({ open, onClose, ticketId }: any) => {
 
     const ticket = ticketData?.supportTicket || {};
 
-    const [replyToSupportTicket] = useReplySupportTicketsMutation();
+    const [replyToSupportTicket] = useReplySupportTicketMutation();
 
     if (isLoading) return <p>Loading...</p>;
+
+    const handleInputChange = (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+        >
+    ) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({ ...prevData, [name]: value }));
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
-            await replyToSupportTicket({
+            const response = await replyToSupportTicket({
                 ticketId,
-                reply,
-            }).unwrap();
+                data: formData,
+            });
+            console.log(response);
             setSuccessMessage("Reply sent successfully");
             setStatusType("success");
             setShowAlert(true);
-            setReply("");
         } catch (e: any) {
+            console.log(e);
             setErrorMessage(e.data.message || "Reply failed");
             setStatusType("error");
             setShowAlert(true);
@@ -68,8 +80,8 @@ const ReplySupportDialog = ({ open, onClose, ticketId }: any) => {
                         <InputField
                             label="Department"
                             value={ticket.department}
-                            onChange={(e) => setReply(e.target.value)}
-                            name="reply"
+                            onChange={handleInputChange}
+                            name="department"
                             type="text"
                             placeholder="Enter Reply"
                             disabled={true}
@@ -78,8 +90,8 @@ const ReplySupportDialog = ({ open, onClose, ticketId }: any) => {
                         <InputField
                             label="Complaint"
                             value={ticket.complaint}
-                            onChange={(e) => setReply(e.target.value)}
-                            name="reply"
+                            onChange={handleInputChange}
+                            name="complain"
                             type="textarea"
                             placeholder="Enter Reply"
                             disabled={true}
@@ -87,8 +99,8 @@ const ReplySupportDialog = ({ open, onClose, ticketId }: any) => {
                         />
                         <InputField
                             label="Reply"
-                            value={reply}
-                            onChange={(e) => setReply(e.target.value)}
+                            value={formData.reply}
+                            onChange={handleInputChange}
                             name="reply"
                             type="text"
                             placeholder="Enter Reply"

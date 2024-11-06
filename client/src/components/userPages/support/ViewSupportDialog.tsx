@@ -52,9 +52,15 @@ export default function ScrollDialog({ open, onClose, ticket }: any) {
                         {ticket?.response || "No response"}
                     </Typography>
                     <Typography variant="body1">
-                        <strong>Date:</strong>{" "}
+                        <strong>Raise Ticket At:</strong>{" "}
                         {new Date(ticket?.createdAt).toLocaleString()}
                     </Typography>
+                    {ticket?.status === "resolved" && (
+                        <Typography variant="body1">
+                            <strong>Resolved At:</strong>{" "}
+                            {new Date(ticket?.resolvedAt).toLocaleString()}
+                        </Typography>
+                    )}
                 </Box>
             </DialogContent>
             <DialogActions>

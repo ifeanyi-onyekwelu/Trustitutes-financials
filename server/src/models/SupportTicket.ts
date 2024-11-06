@@ -14,7 +14,7 @@ const supportTicketSchema = new Schema<ISupportTicket>(
         user: {
             type: Schema.Types.ObjectId,
             ref: "User",
-            default: 0,
+            required: true,
         },
         department: {
             type: String,

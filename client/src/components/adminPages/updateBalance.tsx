@@ -49,6 +49,7 @@ const UpdateBalanceModal = ({
         e.preventDefault();
 
         try {
+            console.log(formData);
             const response = await updateBalance({
                 accountId,
                 data: formData,
