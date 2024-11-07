@@ -8,6 +8,7 @@ import logger from "@/utils/logger";
 import ValidationError from "@/errors/ValidationError";
 import AuthenticationError from "@/errors/AuthenticationError";
 import generateAccountNumber from "@/utils/generateAccountNumber";
+import { emailService } from "..";
 
 class AuthController {
     /**
@@ -83,6 +84,8 @@ class AuthController {
             });
 
             await User.findOneAndUpdate({ _id: user._id }, { refreshToken });
+
+            await emailService.sendLoginEmail(user);
             return logger.respondWithData(res, { accessToken }, 200);
         } catch (error: any) {
             return logger.respondWithError(
@@ -109,11 +112,13 @@ class AuthController {
 
             await user.save();
 
-            await Account.create({
+            const account = await Account.create({
                 user: user._id,
                 accountNumber: generateAccountNumber(),
                 balance: 0,
             });
+
+            await emailService.sendRegisterEmail(user, account);
 
             return logger.respond(
                 res,

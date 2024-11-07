@@ -10,16 +10,16 @@ import mongoose from "mongoose";
 import dbConn from "@/config/dbConn";
 import corsOptions from "@/config/corsOptions";
 import cloudinaryConfig from "@/config/cloudinary";
-// import mailConfig from "@/config/mailConfig";
 import apiRoutes from "@/routes/apiRoutes";
+import EmailService from "./utils/emails/mailer";
 
 config();
 dbConn();
 cloudinaryConfig();
-// mailConfig();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+export const emailService = new EmailService();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

@@ -7,6 +7,7 @@ import logger from "@/utils/logger";
 import CustomError from "@/errors/CustomError";
 import generateRandomReference from "@/utils/generateRefence";
 import uploadImage from "@/utils/uploader";
+import { emailService } from "..";
 
 class TransactionController {
     /**
@@ -35,11 +36,16 @@ class TransactionController {
                 user: req.user._id,
             });
 
-            await Account.findOneAndUpdate(
+            const account = await Account.findOneAndUpdate(
                 { _id: userAccount?._id },
                 { $inc: { balance: amount } }
             );
 
+            await emailService.sendDepositNotification(
+                userAccount,
+                account,
+                amount
+            );
             return logger.respond(res, "Deposit notification received!", 200);
         } catch (err: any) {
             return logger.respondWithError(
