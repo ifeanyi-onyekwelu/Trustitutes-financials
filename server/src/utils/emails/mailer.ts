@@ -9,7 +9,7 @@ interface User {
     email: string;
 }
 
-const ADMIN_EMAIL = "Admin <admin@algotrades.io>"; // Replace with actual admin email
+const ADMIN_EMAIL = "Admin <admin@trustitutesfinancials.com>";
 
 class EmailService {
     transporter: nodemailer.Transporter;
@@ -29,7 +29,8 @@ class EmailService {
 
     async sendMail(to: string, subject: string, html: string) {
         try {
-            await this.transporter.sendMail({
+            console.log("Sending email....");
+            const response = await this.transporter.sendMail({
                 from: ADMIN_EMAIL,
                 to: to,
                 subject: subject,
@@ -39,18 +40,22 @@ class EmailService {
                     "X-PM-Message-Stream": "outbound",
                 },
             });
+            console.log("Response gotten", response);
         } catch (error) {
             console.error(`Error sending mail: ${JSON.stringify(error)}`);
         }
     }
 
     async sendLoginEmail(user: any) {
-        const template = LoginEmail(user.fullName);
+        const template = LoginEmail(`${user.firstName} ${user.lastName}`);
         await this.sendMail(user.email, "New Login Notification", template);
     }
 
     async sendRegisterEmail(user: any, account: any) {
-        const template = RegisterEmail(user.fullName, account.accountNumber);
+        const template = RegisterEmail(
+            `${user.firstName} ${user.lastName}`,
+            account.accountNumber
+        );
         await this.sendMail(
             user.email,
             "Welcome to Trustitutes Financials",

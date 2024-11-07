@@ -9,8 +9,8 @@ import { LoadingBackdrop } from "../../components/common/LoadingBackdrop";
 
 interface FormData {
     firstName: string;
-    lastName: string;
     middleName: string;
+    lastName: string;
     country: string;
     state: string;
     city: string;
@@ -20,6 +20,8 @@ interface FormData {
     email: string;
     password: string;
     password2: string;
+    ssn: string;
+    profilePicture: File | null; // For file uploads
 }
 
 const Register = () => {
@@ -36,7 +38,10 @@ const Register = () => {
         email: "",
         password: "",
         password2: "",
+        ssn: "",
+        profilePicture: null,
     });
+
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
     const [statusType, setStatusType] = useState<"error" | "success">("error");

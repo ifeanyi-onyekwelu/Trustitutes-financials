@@ -104,6 +104,35 @@ class AuthController {
         try {
             const data = req.body;
 
+            // Check for existing email
+            const filterByEmail = await User.findOne({
+                email: data.email,
+            });
+
+            if (filterByEmail) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError(
+                        "An account already exists with this email address",
+                        400
+                    )
+                );
+            }
+
+            // Check for existing phone number
+            const filterByPhoneNumber = await User.findOne({
+                phoneNumber: data.phoneNumber,
+            });
+            if (filterByPhoneNumber) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError(
+                        "An account already exists with this phone number",
+                        400
+                    )
+                );
+            }
+
             const user = new User({
                 ...data,
                 isActive: false,
