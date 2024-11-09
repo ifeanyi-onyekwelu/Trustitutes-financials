@@ -11,6 +11,7 @@ const TransferFunds = () => {
         toAccountNumber: "",
         recipientName: "",
         amount: "",
+        currency: "",
         transferType: "account", // Default to "account" for regular transfer
         wireDetails: {
             bankName: "",
@@ -68,8 +69,8 @@ const TransferFunds = () => {
             setShowAlert(true);
 
             setTimeout(() => {
-                location.href = "/user/dashboard/transfer";
-            }, 3000);
+                location.reload();
+            }, 1000);
         } catch (error: any) {
             setErrorMessage(error.data.message || "Transfer Failed");
             setStatusType("error");

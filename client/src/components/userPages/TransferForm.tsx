@@ -10,6 +10,7 @@ const TransferForm = ({
     isFetchingRecipient,
     recipientName,
     amount,
+    currency,
     wireDetails,
 }: any) => {
     const [selectedTab, setSelectedTab] = useState("account");
@@ -135,6 +136,34 @@ const TransferForm = ({
                     />
                 </>
             )}
+
+            <InputField
+                label="Currency"
+                value={currency}
+                onChange={handleOnChange}
+                name="currency"
+                type="select"
+                required
+                placeholder="Select currency"
+                options={[
+                    {
+                        value: "AUD",
+                        label: "AUD",
+                    },
+                    {
+                        value: "USD",
+                        label: "USD",
+                    },
+                    {
+                        value: "EUR",
+                        label: "EUR",
+                    },
+                    {
+                        value: "GBP",
+                        label: "GBP",
+                    },
+                ]}
+            />
 
             <InputField
                 label="Enter Amount"
