@@ -13,9 +13,11 @@ import { AiFillCreditCard } from "react-icons/ai";
 import { VscHistory } from "react-icons/vsc";
 import formatAmount from "../../config/formatAmount";
 import Logo from "../../assets/img/logo.png";
+import { useUser } from "../../context/UserContext";
 
 const SideBarDrawer = ({ open, toggleDrawer }: any) => {
     const location = useLocation();
+    const userData: any = useUser();
 
     const { data: accountData } = useFetchUserAccountQuery("userAccount");
     const account = accountData?.account || {};
@@ -69,14 +71,14 @@ const SideBarDrawer = ({ open, toggleDrawer }: any) => {
                         <span className="font-extrabold">
                             {formatAmount(account.balance)}
                         </span>{" "}
-                        USD
+                        {userData?.user?.currency}
                     </h1>
                 </div>
                 <p className="text-gray-300">
                     <span className="font-extrabold">
                         {formatAmount(account.balance)}
                     </span>{" "}
-                    USD
+                    {userData?.user?.currency}
                 </p>
             </div>
             <Divider />

@@ -5,9 +5,10 @@ import formatAmount from "../../../config/formatAmount";
 interface Props {
     balance: number;
     accountNumber: number;
+    currency: string;
 }
 
-const CurrentAccount = ({ balance, accountNumber }: Props) => {
+const CurrentAccount = ({ balance, accountNumber, currency }: Props) => {
     return (
         <div className="w-full">
             <div className="flex justify-between items-center mb-5">
@@ -28,7 +29,7 @@ const CurrentAccount = ({ balance, accountNumber }: Props) => {
                 </div>
                 <div className="flex space-x-1 items-center text-gray-400">
                     <p className="font-bold text-xl">{formatAmount(balance)}</p>
-                    <p className="text-xl">USD</p>
+                    <p className="text-xl">{currency}</p>
                 </div>
             </div>
         </div>

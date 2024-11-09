@@ -7,9 +7,10 @@ interface Props {
     lastLogin: string;
     fullName: string;
     ip: string;
+    currency: string;
 }
 
-const Overview = ({ balance, lastLogin, fullName, ip }: Props) => {
+const Overview = ({ balance, lastLogin, fullName, ip, currency }: Props) => {
     return (
         <div className="w-full md:w-1/2">
             <h3 className="text-xl text-white font-semibold mb-5">Overview</h3>
@@ -35,7 +36,7 @@ const Overview = ({ balance, lastLogin, fullName, ip }: Props) => {
                             Available balance
                         </p>
                         <h3 className="text-white font-bold text-lg">
-                            USD {balance && formatAmount(balance)}
+                            {currency} {balance && formatAmount(balance)}
                         </h3>
                         <p className="text-md text-gray-400">
                             {fullName ? fullName : "Unknown User"}

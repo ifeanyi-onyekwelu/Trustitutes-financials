@@ -11,6 +11,7 @@ interface IUser {
     profilePicture: string;
     address: string;
     state: string;
+    currency: string;
     city: string;
     phoneNumber: string;
     dateOfBirth: Date;
@@ -41,6 +42,10 @@ const userSchema = new Schema<IUser>(
             type: String,
             required: true,
             unique: true,
+        },
+        currency: {
+            type: String,
+            required: true,
         },
         password: {
             type: String,

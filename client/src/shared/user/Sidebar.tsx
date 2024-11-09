@@ -5,10 +5,12 @@ import { Link, useLocation } from "react-router-dom";
 import { useFetchUserAccountQuery } from "../../features/user/userApiSlice";
 import formatAmount from "../../config/formatAmount";
 import Logo from "../../assets/img/logo.png";
+import { useUser } from "../../context/UserContext";
 
 const Sidebar = () => {
     const location = useLocation();
     const { pathname } = location;
+    const userData: any = useUser();
 
     const { data: accountData, isLoading } =
         useFetchUserAccountQuery("userAccount");
@@ -59,14 +61,14 @@ const Sidebar = () => {
                         <span className="font-extrabold">
                             {formatAmount(account.balance)}
                         </span>{" "}
-                        USD
+                        {userData?.user?.currency}
                     </h1>
                 </div>
                 <p className="text-gray-300">
                     <span className="font-extrabold">
                         {formatAmount(account.balance)}
                     </span>{" "}
-                    USD
+                    {userData?.user?.currency}
                 </p>
             </div>
 

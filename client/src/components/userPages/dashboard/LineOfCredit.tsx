@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import { IoWallet } from "react-icons/io5";
 
-const LineOfCredit = () => {
+const LineOfCredit = ({ currency }: any) => {
     return (
         <div className="w-full">
             <div className="flex justify-between items-center mb-5">
@@ -24,7 +24,7 @@ const LineOfCredit = () => {
                     </div>
                     <div className="flex space-x-1 items-center text-gray-400">
                         <p className="font-bold text-xl">+ 0</p>
-                        <p className="text-xl">USD</p>
+                        <p className="text-xl">{currency}</p>
                     </div>
                 </div>
                 <div className="w-full md:w-1/2 bg-gray-900 p-5  rounded-lg">

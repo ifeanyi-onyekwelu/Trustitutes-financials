@@ -34,7 +34,7 @@ const ProfileDetailsForm = () => {
         e.preventDefault();
         try {
             const response = await updateProfile({ ...formData });
-            setSuccessMessage("Transfer Successful");
+            setSuccessMessage("Profile Updated Successful");
             setStatusType("success");
             setShowAlert(true);
         } catch (error: any) {

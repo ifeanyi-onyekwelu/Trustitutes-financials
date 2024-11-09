@@ -29,13 +29,15 @@ const Dashboard = () => {
                     fullName={`${userData?.user?.firstName} ${userData?.user?.lastName}`}
                     lastLogin="15 December 2020"
                     ip={userData?.ipAddress}
+                    currency={userData?.user?.currency}
                 />
                 <div className="flex flex-col space-y-5 w-full md:w-1/2">
                     <CurrentAccount
                         balance={account?.balance}
                         accountNumber={account?.accountNumber}
+                        currency={userData?.user?.currency}
                     />
-                    <LineOfCredit />
+                    <LineOfCredit currency={userData?.user?.currency} />
                 </div>
             </div>
 

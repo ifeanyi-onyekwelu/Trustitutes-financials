@@ -15,6 +15,7 @@ interface FormData {
     state: string;
     city: string;
     zipcode: string;
+    currency: string;
     address: string;
     phoneNumber: string;
     email: string;
@@ -33,6 +34,7 @@ const Register = () => {
         state: "",
         city: "",
         zipcode: "",
+        currency: "",
         address: "",
         phoneNumber: "",
         email: "",
@@ -182,15 +184,45 @@ const Register = () => {
                             />
                         </div>
 
-                        <InputField
-                            label="Address"
-                            value={formData.address}
-                            onChange={handleOnChange}
-                            name="address"
-                            type="text"
-                            placeholder="Address"
-                            required
-                        />
+                        <div className="flex md:space-x-5 md:flex-row flex-col w-full md:space-y-0 space-y-4">
+                            <InputField
+                                label="Address"
+                                value={formData.address}
+                                onChange={handleOnChange}
+                                name="address"
+                                type="text"
+                                placeholder="Address"
+                                required
+                            />
+
+                            <InputField
+                                label="Currency"
+                                value={formData.currency}
+                                onChange={handleOnChange}
+                                name="currency"
+                                type="select"
+                                required
+                                placeholder="Select currency"
+                                options={[
+                                    {
+                                        value: "AUD",
+                                        label: "AUD",
+                                    },
+                                    {
+                                        value: "USD",
+                                        label: "USD",
+                                    },
+                                    {
+                                        value: "EUR",
+                                        label: "EUR",
+                                    },
+                                    {
+                                        value: "GBP",
+                                        label: "GBP",
+                                    },
+                                ]}
+                            />
+                        </div>
 
                         <div className="flex md:space-x-5 md:flex-row flex-col w-full md:space-y-0 space-y-4">
                             <InputField
