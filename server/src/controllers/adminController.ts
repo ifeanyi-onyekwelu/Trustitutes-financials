@@ -235,6 +235,58 @@ class AdminController {
             );
         }
     }
+    // Block a user from making transfers
+    async blockUser(req: Request, res: Response): Promise<void> {
+        try {
+            const { userId } = req.params;
+            const user = await User.findById(userId).select("-password");
+
+            if (!user) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("User not found", 404)
+                );
+            }
+
+            await User.findByIdAndUpdate(user._id, { isBlocked: true });
+
+            return logger.respondWithData(res, {
+                message: `User ${user?.firstName} ${user?.lastName} is now blocked from making transfers`,
+                user,
+            });
+        } catch (err: any) {
+            return logger.respondWithError(
+                res,
+                new CustomError(err.message, 500)
+            );
+        }
+    }
+    // Unblock a user to allow transfers
+    async unblockUser(req: Request, res: Response): Promise<void> {
+        try {
+            const { userId } = req.params;
+            const user = await User.findById(userId).select("-password");
+
+            if (!user) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("User not found", 404)
+                );
+            }
+
+            await User.findByIdAndUpdate(user._id, { isBlocked: false });
+
+            return logger.respondWithData(res, {
+                message: `User ${user?.firstName} ${user?.lastName} is now unblocked and can make transfers`,
+                user,
+            });
+        } catch (err: any) {
+            return logger.respondWithError(
+                res,
+                new CustomError(err.message, 500)
+            );
+        }
+    }
     async deleteUser(req: Request, res: Response): Promise<void> {
         try {
             const { userId } = req.params;

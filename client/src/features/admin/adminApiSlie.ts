@@ -118,6 +118,20 @@ export const adminApiSlice = baseApi.injectEndpoints({
                 body: data,
             }),
         }),
+        // Block user account
+        blockUserAccount: builder.mutation({
+            query: (userId) => ({
+                url: `/admin/users/block-user/${userId}`,
+                method: "PUT",
+            }),
+        }),
+        // Unblock a user account
+        unblockUserAccount: builder.mutation({
+            query: (userId) => ({
+                url: `/admin/users/unblock-user/${userId}`,
+                method: "PUT",
+            }),
+        }),
     }),
 });
 
@@ -140,4 +154,6 @@ export const {
     useFetchSupportTicketByIdQuery,
     useReplySupportTicketMutation,
     useUpdateUserBalanceMutation,
+    useBlockUserAccountMutation,
+    useUnblockUserAccountMutation,
 } = adminApiSlice;

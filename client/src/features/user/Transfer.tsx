@@ -5,6 +5,7 @@ import {
 } from "./userApiSlice";
 import TransferForm from "../../components/userPages/TransferForm";
 import Alert from "../../components/common/Alert";
+import { LoadingBackdrop } from "../../components/common/LoadingBackdrop";
 
 const TransferFunds = () => {
     const [formData, setFormData] = useState({
@@ -124,6 +125,8 @@ const TransferFunds = () => {
                     setShowAlert={setShowAlert}
                 />
             )}
+
+            <LoadingBackdrop open={transferLoading} />
         </div>
     );
 };

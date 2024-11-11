@@ -7,6 +7,8 @@ import {
     useActivateUserAccountMutation,
     useDeleteUserAccountMutation,
     useFetchUserByIdQuery,
+    useBlockUserAccountMutation,
+    useUnblockUserAccountMutation,
 } from "./adminApiSlie";
 import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
 import { Link } from "react-router-dom";
@@ -25,6 +27,9 @@ const UserDetailsPage = () => {
     const [suspendUserAccount] = useSuspendUserAccountMutation();
     const [activateUserAccount] = useActivateUserAccountMutation();
     const [deleteUserAccount] = useDeleteUserAccountMutation();
+
+    const [blockUserAccount] = useBlockUserAccountMutation();
+    const [unblockUserAccount] = useUnblockUserAccountMutation();
 
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
@@ -162,58 +167,81 @@ const UserDetailsPage = () => {
                 <p className="text-2xl font-semibold text-red-700">Danger</p>
             </div>
 
-            <div className="flex flex-col space-y-3 bg-gray-900 p-6 border border-red-900 rounded-lg">
-                {user.isActive ? (
-                    <div className="flex md:flex-row flex-col justify-between text-white md:space-y-0 space-y-3">
-                        <div>
-                            <h3 className="text-2xl font-medium">
-                                Suspend Account
-                            </h3>
-                            <p>Temporarily disable user access.</p>
-                        </div>
-                        <Button
-                            type="button"
-                            variant="contained"
-                            startIcon={<BiLock />}
-                            color="error"
-                            onClick={() =>
-                                handleAccountAction(
-                                    () => suspendUserAccount(userId),
-                                    "Account suspended successfully."
-                                )
-                            }
-                        >
-                            Suspend Account
-                        </Button>
+            <div className="bg-gray-900 p-6 border border-red-900 rounded-lg space-y-6">
+                {/* Suspend/Activate Account Section */}
+                <div className="flex flex-col space-y-3 md:flex-row md:space-y-0 md:space-x-3 justify-between text-white items-center">
+                    <div className="flex-1">
+                        <h3 className="text-xl font-medium">
+                            {user.isActive
+                                ? "Suspend Account"
+                                : "Activate Account"}
+                        </h3>
+                        <p>
+                            {user.isActive
+                                ? "Temporarily disable user access."
+                                : "Restore user access to the account."}
+                        </p>
                     </div>
-                ) : (
-                    <div className="flex md:flex-row flex-col justify-between text-white">
-                        <div>
-                            <h3 className="text-2xl font-medium">
-                                Activate Account
-                            </h3>
-                            <p>Restore user access to the account.</p>
-                        </div>
-                        <Button
-                            type="button"
-                            variant="contained"
-                            color="success"
-                            startIcon={<BiLockOpen />}
-                            onClick={() =>
-                                handleAccountAction(
-                                    () => activateUserAccount(userId),
-                                    "Account activated successfully."
-                                )
-                            }
-                        >
-                            Activate Account
-                        </Button>
-                    </div>
-                )}
+                    <Button
+                        type="button"
+                        variant="contained"
+                        startIcon={user.isActive ? <BiLock /> : <BiLockOpen />}
+                        color={user.isActive ? "error" : "success"}
+                        className="w-full md:w-auto"
+                        onClick={() =>
+                            handleAccountAction(
+                                user.isActive
+                                    ? () => suspendUserAccount(userId)
+                                    : () => activateUserAccount(userId),
+                                user.isActive
+                                    ? "Account suspended successfully."
+                                    : "Account activated successfully."
+                            )
+                        }
+                    >
+                        {user.isActive ? "Suspend Account" : "Activate Account"}
+                    </Button>
+                </div>
 
-                <div className="flex md:flex-row flex-col justify-between text-white">
-                    <div>
-                        <h3 className="text-2xl font-medium">Delete Account</h3>
+                {/* Block/Unblock Account Section */}
+                <div className="flex flex-col space-y-3 md:flex-row md:space-y-0 md:space-x-3 justify-between text-white items-center">
+                    <div className="flex-1">
+                        <h3 className="text-xl font-medium">
+                            {user.isBlocked
+                                ? "Unblock Account"
+                                : "Block Account"}
+                        </h3>
+                        <p>
+                            {user.isBlocked
+                                ? "Allow user to make transfers again."
+                                : "Restrict user from making transfers."}
+                        </p>
+                    </div>
+                    <Button
+                        type="button"
+                        variant="contained"
+                        startIcon={user.isBlocked ? <BiLockOpen /> : <BiLock />}
+                        color={user.isBlocked ? "success" : "warning"}
+                        className="w-full md:w-auto"
+                        onClick={() =>
+                            handleAccountAction(
+                                user.isBlocked
+                                    ? () => unblockUserAccount(userId)
+                                    : () => blockUserAccount(userId),
+                                user.isBlocked
+                                    ? "Account unblocked successfully."
+                                    : "Account blocked successfully."
+                            )
+                        }
+                    >
+                        {user.isBlocked ? "Unblock Account" : "Block Account"}
+                    </Button>
+                </div>
+
+                {/* Delete Account Section */}
+                <div className="flex flex-col space-y-3 md:flex-row md:space-y-0 md:space-x-3 justify-between text-white items-center">
+                    <div className="flex-1">
+                        <h3 className="text-xl font-medium">Delete Account</h3>
                         <p>Permanently remove user account and data.</p>
                     </div>
                     <Button
@@ -221,6 +249,7 @@ const UserDetailsPage = () => {
                         variant="contained"
                         startIcon={<BiTrash />}
                         color="error"
+                        className="w-full md:w-auto"
                         onClick={() =>
                             handleAccountAction(
                                 () => deleteUserAccount(userId),

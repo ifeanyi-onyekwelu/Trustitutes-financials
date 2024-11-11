@@ -22,6 +22,7 @@ interface IUser {
     isVerified: boolean;
     isDeleted: boolean;
     isActive: boolean;
+    isBlocked: boolean;
 }
 
 const userSchema = new Schema<IUser>(
@@ -73,6 +74,10 @@ const userSchema = new Schema<IUser>(
         isActive: {
             type: Boolean,
             default: true,
+        },
+        isBlocked: {
+            type: Boolean,
+            default: false,
         },
         isDeleted: {
             type: Boolean,

@@ -66,6 +66,34 @@ class TransactionController {
      */
     async transferFund(req: Request, res: Response): Promise<void> {
         try {
+            // Find the current user's details
+            const user = await User.findById(req.user._id);
+
+            if (!user) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("User not found", 404)
+                );
+            }
+
+            // Check if the user is allowed to make transfers
+            if (user.isBlocked) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError(
+                        "Transfers are currently unavailable for your account. Please contact support or raise a support ticket for further assistance.",
+                        403
+                    )
+                );
+            }
+
+            if (!user.isActive || user.isDeleted) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("User account is inactive or deleted", 403)
+                );
+            }
+
             const { toAccountNumber, amount } = req.body;
 
             // Find the account from which funds will be transferred (current user's account)
@@ -80,6 +108,14 @@ class TransactionController {
                         "Account not found for the current user",
                         404
                     )
+                );
+            }
+
+            // Check for self-transfer
+            if (fromAccount.accountNumber === toAccountNumber) {
+                return logger.respondWithError(
+                    res,
+                    new CustomError("Self-transfers are not allowed", 400)
                 );
             }
 

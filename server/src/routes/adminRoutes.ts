@@ -52,6 +52,18 @@ router.put(
     adminController.activateUser
 );
 router.put(
+    "/users/block-user/:userId",
+    protect,
+    adminOnly,
+    adminController.blockUser
+);
+router.put(
+    "/users/unblock-user/:userId",
+    protect,
+    adminOnly,
+    adminController.unblockUser
+);
+router.put(
     "/users/delete-user/:userId",
     protect,
     adminOnly,
