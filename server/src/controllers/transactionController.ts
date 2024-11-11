@@ -81,7 +81,7 @@ class TransactionController {
                 return logger.respondWithError(
                     res,
                     new CustomError(
-                        "Transfers are currently unavailable for your account. Please contact support or raise a support ticket for further assistance.",
+                        "Transfer blocked! Contact your bank support for more information on how to unfreeze your account.",
                         403
                     )
                 );
