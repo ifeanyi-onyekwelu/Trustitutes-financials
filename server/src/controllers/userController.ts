@@ -10,7 +10,7 @@ import path from "path";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "build/uploads/profile_pictures");
+        cb(null, "public/images");
     },
     filename: (req, file, cb) => {
         cb(
@@ -86,37 +86,34 @@ class UserController {
      * @error-handling - Returns a 500 error if an unexpected error occurs during the change password process
      */
 
-    async uploadProfileImage(req: Request, res: Response): Promise<void> {
+    async uploadProfileImage(req: Request, res: Response) {
         upload.single("file")(req, res, async (err) => {
             try {
-                if (err) return res.status(500).send({ error: err });
-
+                if (err) {
+                    console.error("Error during file upload:", err);
+                    return res
+                        .status(400)
+                        .send({ error: "Invalid file format" });
+                }
                 const imageUrl = (await uploadImage(req.file.path)) || "";
 
                 const user = await User.findById(req.user._id);
-                if (!user)
-                    return logger.respondWithError(
-                        res,
-                        new CustomError("User not found", 404)
-                    );
+                if (!user) {
+                    console.error("User not found for ID:", req.user._id);
+                    return res.status(404).send({ error: "User not found" });
+                }
 
                 user.profilePicture = imageUrl;
                 await user.save();
 
-                return logger.respondWithData(
-                    res,
-                    {
-                        message: "Upload successful!",
-                        status: true,
-                        file: req.file,
-                    },
-                    200
-                );
+                return res.status(200).send({
+                    message: "Upload successful!",
+                    status: true,
+                    file: req.file,
+                });
             } catch (err: any) {
-                return logger.respondWithError(
-                    res,
-                    new CustomError(err.message, 500)
-                );
+                console.error("Error during image upload:", err);
+                return res.status(500).send({ error: "Internal server error" });
             }
         });
     }

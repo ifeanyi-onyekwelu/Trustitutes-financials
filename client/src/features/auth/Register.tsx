@@ -6,6 +6,7 @@ import { useRegisterMutation } from "./authApiSlice";
 import Alert from "../../components/common/Alert";
 import InputField from "../../components/common/InputField";
 import { LoadingBackdrop } from "../../components/common/LoadingBackdrop";
+import axios from "axios";
 
 interface FormData {
     firstName: string;
@@ -19,10 +20,10 @@ interface FormData {
     address: string;
     phoneNumber: string;
     email: string;
+    image: string;
     password: string;
     password2: string;
     ssn: string;
-    profilePicture: File | null; // For file uploads
 }
 
 const Register = () => {
@@ -38,10 +39,10 @@ const Register = () => {
         address: "",
         phoneNumber: "",
         email: "",
+        image: "",
         password: "",
         password2: "",
         ssn: "",
-        profilePicture: null,
     });
 
     const [errorMessage, setErrorMessage] = useState<string>("");
@@ -53,29 +54,31 @@ const Register = () => {
     const [register, { isLoading }] = useRegisterMutation();
 
     const handleOnSubmit = async (e: React.FormEvent) => {
+        console.log(formData);
         e.preventDefault();
-        try {
-            const response = await register({
-                ...formData,
-                roles: ["user"],
-            }).unwrap();
-
-            setSuccessMessage("Registration Successful");
-            setStatusType("success");
-            setShowAlert(true);
-
-            setTimeout(() => {
+        await axios
+            .post(
+                "https://trustitutes-financials.onrender.com/api/v1/auth/register",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data", // Set content type for FormData
+                    },
+                }
+            )
+            .then(() => {
+                setSuccessMessage("Registration successful. Please log in.");
+                setShowAlert(true);
+                setStatusType("success");
                 navigate("/secure/sign-in");
-            }, 3000);
-        } catch (error: any) {
-            if (error.status === "FETCH_ERROR") {
-                setErrorMessage("No server responded!");
-            } else {
-                setErrorMessage(error.data.message);
-            }
-            setStatusType("error");
-            setShowAlert(true);
-        }
+            })
+
+            .catch((error) => {
+                setErrorMessage(error?.response?.data?.message);
+                setShowAlert(true);
+                setStatusType("error");
+                console.log("Error in post data" + error.message);
+            });
     };
 
     const handleOnChange = (
@@ -88,6 +91,12 @@ const Register = () => {
             ...prevState,
             [name]: value,
         }));
+    };
+
+    const handleFileChange = (event: any) => {
+        const file = event.target.files[0];
+        console.log(file);
+        setFormData({ ...formData, image: file });
     };
 
     return (
@@ -241,6 +250,20 @@ const Register = () => {
                                 name="phoneNumber"
                                 type="text"
                                 placeholder="Phone Number"
+                                required
+                            />
+                        </div>
+
+                        <div className="w-full">
+                            <label className="block text-gray-400 font-semibold mb-2">
+                                Profile Image{" "}
+                                <span className="text-red-700">*</span>
+                            </label>
+                            <input
+                                type="file"
+                                name="image"
+                                onChange={handleFileChange}
+                                className="w-full py-2 px-4 bg-gray-900 text-gray-100 border rounded-md border-gray-300 focus:border-blue-800 focus:outline-none font-medium"
                                 required
                             />
                         </div>

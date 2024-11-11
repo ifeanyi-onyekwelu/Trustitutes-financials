@@ -5,8 +5,21 @@ import protect from "@/middlewares/authMiddleware";
 import checkUserSetup from "@/middlewares/checkUserSetup";
 import getUserIp from "@/middlewares/getUserIp";
 
+import multer from "multer";
+
 const router = express.Router();
 const userController = new UserController();
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        return cb(null, "./public/images");
+    },
+    filename: function (req, file, cb) {
+        return cb(null, Date.now() + "-" + file.originalname);
+    },
+});
+
+const upload = multer({ storage: storage });
 
 // Routes for userController
 router.post(

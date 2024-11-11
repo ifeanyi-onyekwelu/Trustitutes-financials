@@ -9,6 +9,7 @@ import { useUser } from "../../context/UserContext";
 
 const Dashboard = () => {
     const userData: any = useUser();
+    console.log(userData);
     const { data: accountData, isLoading } =
         useFetchUserAccountQuery("userAccount");
 
@@ -30,6 +31,7 @@ const Dashboard = () => {
                     lastLogin="15 December 2020"
                     ip={userData?.ipAddress}
                     currency={userData?.user?.currency}
+                    profileImage={userData?.user?.profilePicture}
                 />
                 <div className="flex flex-col space-y-5 w-full md:w-1/2">
                     <CurrentAccount

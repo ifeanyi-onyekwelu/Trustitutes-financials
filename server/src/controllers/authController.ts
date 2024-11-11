@@ -9,6 +9,7 @@ import ValidationError from "@/errors/ValidationError";
 import AuthenticationError from "@/errors/AuthenticationError";
 import generateAccountNumber from "@/utils/generateAccountNumber";
 import { emailService } from "..";
+import uploadImage from "@/utils/uploader";
 
 class AuthController {
     /**
@@ -104,6 +105,8 @@ class AuthController {
         try {
             const data = req.body;
 
+            const imageUrl = (await uploadImage(req.file.path)) || "";
+
             // Check for existing email
             const filterByEmail = await User.findOne({
                 email: data.email,
@@ -136,6 +139,7 @@ class AuthController {
             const user = new User({
                 ...data,
                 isActive: false,
+                profilePicture: imageUrl,
                 roles: ["user"],
             });
 

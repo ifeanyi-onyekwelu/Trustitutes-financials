@@ -8,9 +8,17 @@ interface Props {
     fullName: string;
     ip: string;
     currency: string;
+    profileImage: any;
 }
 
-const Overview = ({ balance, lastLogin, fullName, ip, currency }: Props) => {
+const Overview = ({
+    balance,
+    lastLogin,
+    fullName,
+    ip,
+    currency,
+    profileImage,
+}: Props) => {
     return (
         <div className="w-full md:w-1/2">
             <h3 className="text-xl text-white font-semibold mb-5">Overview</h3>
@@ -18,7 +26,7 @@ const Overview = ({ balance, lastLogin, fullName, ip, currency }: Props) => {
                 <div className="flex flex-col space-y-5 w-1/2">
                     <Avatar
                         alt="Avatar"
-                        src={Image}
+                        src={profileImage}
                         sx={{ width: "100px", height: "100px" }}
                     />
                     <div className="flex flex-col">

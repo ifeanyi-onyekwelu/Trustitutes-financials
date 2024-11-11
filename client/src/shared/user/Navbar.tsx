@@ -106,9 +106,9 @@ const Navbar = ({ toggleDrawer }: any) => {
                             aria-expanded={open ? "true" : undefined}
                         >
                             <Avatar
-                                {...stringAvatar(
-                                    `${userData.user.firstName} ${userData.user.lastName}`
-                                )}
+                                alt="Avatar"
+                                src={userData?.user?.profilePicture}
+                                sx={{ width: "50px", height: "50px" }}
                             />
                             <div className="flex flex-col text-sm items-start">
                                 <span className="text-green-600">
