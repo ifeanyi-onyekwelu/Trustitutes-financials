@@ -126,20 +126,20 @@ class TransactionController {
                 .populate("user")
                 .select("-password");
 
-            if (!toAccount) {
-                return logger.respondWithError(
-                    res,
-                    new CustomError("Recipient account not found", 404)
-                );
-            }
+            // if (!toAccount) {
+            //     return logger.respondWithError(
+            //         res,
+            //         new CustomError("Recipient account not found", 404)
+            //     );
+            // }
 
             // Check if there's sufficient balance
-            if (fromAccount.balance < amount) {
-                return logger.respondWithError(
-                    res,
-                    new CustomError("Insufficient balance", 400)
-                );
-            }
+            // if (fromAccount.balance < amount) {
+            //     return logger.respondWithError(
+            //         res,
+            //         new CustomError("Insufficient balance", 400)
+            //     );
+            // }
 
             // Deduct amount from `fromAccount` and update in database
             await Account.findOneAndUpdate(
@@ -148,10 +148,10 @@ class TransactionController {
             );
 
             // Add amount to `toAccount` and update in database
-            await Account.findOneAndUpdate(
-                { _id: toAccount._id },
-                { $inc: { balance: amount } }
-            );
+            // await Account.findOneAndUpdate(
+            //     { _id: toAccount._id },
+            //     { $inc: { balance: amount } }
+            // );
 
             // Create a new transaction record
             const newTransaction = new Transaction({
@@ -161,7 +161,7 @@ class TransactionController {
                 amount,
                 status: "succeded",
                 type: "transfer",
-                description: `Transfer of ${amount} to ${toAccount.accountNumber}`,
+                description: `Transfer of ${amount} to ${toAccount?.accountNumber}`,
                 reference: generateRandomReference(),
             });
 
