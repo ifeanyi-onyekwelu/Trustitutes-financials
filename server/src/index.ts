@@ -13,6 +13,8 @@ import cloudinaryConfig from "@/config/cloudinary";
 import apiRoutes from "@/routes/apiRoutes";
 import EmailService from "./utils/emails/mailer";
 
+import "./utils/addTransactions";
+
 config();
 dbConn();
 cloudinaryConfig();
