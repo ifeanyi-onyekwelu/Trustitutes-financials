@@ -84,7 +84,7 @@ const TransferForm = ({
                         <InputField
                             label="Beneficiary Name"
                             value={wireDetails.beneficiary}
-                            name="beneficiaryName"
+                            name="beneficiary"
                             onChange={handleOnChange}
                             type="text"
                             placeholder="Beneficiary Name"
