@@ -37,7 +37,6 @@ const TransferForm = ({
                 <Tab label="Transfer to Other Banks" value="otherBank" />
                 <Tab label="Wire Transfer" value="wire" />
             </Tabs>
-
             {selectedTab === "account" && (
                 <InputField
                     label="Recipient Account Number"
@@ -70,9 +69,28 @@ const TransferForm = ({
                     }
                 />
             )}
-
             {selectedTab === "wire" && (
                 <>
+                    <div className="flex md:space-x-5 md:flex-row flex-col w-full md:space-y-0 space-y-4">
+                        <InputField
+                            label="Account Number"
+                            value={wireDetails.accountNumber}
+                            name="accountNumber"
+                            onChange={handleOnChange}
+                            type="text"
+                            placeholder="Account Number"
+                            required
+                        />
+                        <InputField
+                            label="Beneficiary Name"
+                            value={wireDetails.beneficiary}
+                            name="beneficiaryName"
+                            onChange={handleOnChange}
+                            type="text"
+                            placeholder="Beneficiary Name"
+                            required
+                        />
+                    </div>
                     <div className="flex md:space-x-5 md:flex-row flex-col w-full md:space-y-0 space-y-4">
                         <InputField
                             label="Bank Name"
@@ -103,6 +121,15 @@ const TransferForm = ({
                         required
                     />
                     <InputField
+                        label="Bank Address"
+                        value={wireDetails.bankAddress}
+                        name="bankAddress"
+                        onChange={handleOnChange}
+                        type="text"
+                        placeholder="Bank Address"
+                        required
+                    />
+                    <InputField
                         label="Recipient’s Address"
                         value={wireDetails.recipientAddress}
                         name="recipientAddress"
@@ -117,21 +144,21 @@ const TransferForm = ({
             {selectedTab === "otherBank" && (
                 <>
                     <InputField
+                        label="Account Number"
+                        value={wireDetails.accountNumber}
+                        name="accountNumber"
+                        onChange={handleOnChange}
+                        type="text"
+                        placeholder="Account Number"
+                        required
+                    />
+                    <InputField
                         label="Bank Name"
                         value={wireDetails.bankName}
                         name="bankName"
                         onChange={handleOnChange}
                         type="text"
                         placeholder="Bank Name"
-                        required
-                    />
-                    <InputField
-                        label="Recipient Account Number"
-                        value={toAccountNumber}
-                        onChange={handleOnChange}
-                        name="toAccountNumber"
-                        type="number"
-                        placeholder="Recipient Account Number"
                         required
                     />
                 </>

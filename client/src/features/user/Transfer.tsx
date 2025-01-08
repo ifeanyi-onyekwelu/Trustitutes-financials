@@ -15,6 +15,9 @@ const TransferFunds = () => {
         currency: "",
         transferType: "account", // Default to "account" for regular transfer
         wireDetails: {
+            accountNumber: "",
+            beneficiary: "",
+            bankAddress: "",
             bankName: "",
             swiftCode: "",
             routingNumber: "",
