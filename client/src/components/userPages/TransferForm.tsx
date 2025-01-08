@@ -74,8 +74,8 @@ const TransferForm = ({
                     <div className="flex md:space-x-5 md:flex-row flex-col w-full md:space-y-0 space-y-4">
                         <InputField
                             label="Account Number"
-                            value={wireDetails.accountNumber}
-                            name="accountNumber"
+                            value={toAccountNumber}
+                            name="toAccountNumber"
                             onChange={handleOnChange}
                             type="text"
                             placeholder="Account Number"

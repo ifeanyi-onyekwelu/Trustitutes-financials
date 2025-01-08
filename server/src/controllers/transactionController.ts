@@ -161,7 +161,7 @@ class TransactionController {
                 amount,
                 status: "succeded",
                 type: "transfer",
-                description: `Transfer of ${amount} to ${toAccount?.accountNumber}`,
+                description: `Transfer of ${amount} to ${toAccountNumber}`,
                 reference: generateRandomReference(),
             });
 
