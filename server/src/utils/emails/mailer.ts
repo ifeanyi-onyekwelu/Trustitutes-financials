@@ -52,6 +52,7 @@ class EmailService {
     }
 
     async sendRegisterEmail(user: any, account: any) {
+        console.log("Sending register email...");
         const template = RegisterEmail(
             `${user.firstName} ${user.lastName}`,
             account.accountNumber

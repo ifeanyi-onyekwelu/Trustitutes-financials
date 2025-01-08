@@ -51,34 +51,48 @@ const Register = () => {
     const [showAlert, setShowAlert] = useState<boolean>(false);
 
     const navigate = useNavigate();
-    const [register, { isLoading }] = useRegisterMutation();
+
+    const [loading, isLoading] = useState<boolean>(false);
 
     const handleOnSubmit = async (e: React.FormEvent) => {
         console.log(formData);
         e.preventDefault();
-        await axios
-            .post(
-                "https://trustitutes-financials.onrender.com/api/v1/auth/register",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data", // Set content type for FormData
-                    },
-                }
-            )
-            .then(() => {
-                setSuccessMessage("Registration successful. Please log in.");
-                setShowAlert(true);
-                setStatusType("success");
-                navigate("/secure/sign-in");
-            })
 
-            .catch((error) => {
-                setErrorMessage(error?.response?.data?.message);
-                setShowAlert(true);
-                setStatusType("error");
-                console.log("Error in post data" + error.message);
-            });
+        isLoading(true);
+
+        try {
+            await axios
+                .post(
+                    "https://trustitutes-financials.onrender.com/api/v1/auth/register",
+                    // "http://localhost:4567/api/v1/auth/register",
+                    formData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data", // Set content type for FormData
+                        },
+                    }
+                )
+                .then(() => {
+                    setSuccessMessage(
+                        "Registration successful. Please log in."
+                    );
+                    setShowAlert(true);
+                    setStatusType("success");
+                    navigate("/secure/sign-in");
+                })
+
+                .catch((error) => {
+                    setErrorMessage(error?.response?.data?.message);
+                    setShowAlert(true);
+                    setStatusType("error");
+                    console.log("Error in post data" + error.message);
+                });
+        } catch (error: any) {
+            console.log("Error in post data" + error);
+            setErrorMessage(error?.message);
+        } finally {
+            isLoading(false);
+        }
     };
 
     const handleOnChange = (
@@ -289,12 +303,8 @@ const Register = () => {
                             />
                         </div>
 
-                        <Button
-                            variant="contained"
-                            type="submit"
-                            disabled={isLoading}
-                        >
-                            Register
+                        <Button variant="contained" type="submit">
+                            {loading ? "Please wait..." : "Register"}
                         </Button>
                     </form>
                     <Link
@@ -315,8 +325,6 @@ const Register = () => {
                     setShowAlert={setShowAlert}
                 />
             )}
-
-            <LoadingBackdrop open={isLoading} />
         </>
     );
 };
